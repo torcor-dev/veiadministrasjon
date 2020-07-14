@@ -1,0 +1,25 @@
+{% extends "brukerliste/base.html" %}
+{% block content %}
+    <table>
+    {% for h in hytter %}
+        <tr>
+            <td>{{ h.eier.etternavn }}</td>
+            <td>{{ h.eier.fornavn }}</td>
+            <td>{{ h.gnr }}</td>
+            <td>{{ h.bnr }}</td>
+            <td>{{ h.sone }}</td>
+            <td>{{ h.eier.adresse }}</td>
+            <td>{{ h.eier.postnr.postnr }}</td>
+            <td>{{ h.eier.postnr.poststed }}</td>
+            <td>{{ h.eier.telefon }}</td>
+            <td>{{ h.eier.epost }}</td>
+            <td>{{ h.eier.broyting }}</td>
+            <td>{{ h.eier.faktureres }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+
+
+{% endblock content %}
+
