@@ -1,0 +1,19 @@
+{% extends "brukerliste/base.html" %}
+{% block content %}
+    <table>
+        <tr>
+            <td>{{ object.etternavn }}</td>
+            <td>{{ object.fornavn }}</td>
+            <td>{{ object.hytte.first.gnr }}</td>
+            <td>{{ object.hytte.first.bnr }}</td>
+            <td>{{ object.hytte.first.sone }}</td>
+            <td>{{ object.adresse.first.gate }}</td>
+            <td>{{ object.adresse.first.postnr.postnr }}</td>
+            <td>{{ object.adresse.first.postnr.poststed }}</td>
+            <td>{{ object.tlf.first.nr }}</td>
+            <td>{{ object.epost }}</td>
+            <td>{{ object.broyting }}</td>
+            <td>{{ object.faktureres }}</td>
+        </tr>
+    </table>
+{% endblock content %}
