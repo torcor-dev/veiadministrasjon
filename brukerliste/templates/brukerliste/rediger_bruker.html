@@ -1,0 +1,14 @@
+{% extends "brukerliste/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ bform | crispy }}
+        {{ aform | crispy }}
+        {{ pform | crispy }}
+        {{ tform | crispy }}
+        {{ hform | crispy }}
+        <input type="submit" value="Submit">
+    </form>
+{% endblock content %}
+

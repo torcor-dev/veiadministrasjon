@@ -2,8 +2,47 @@ from datetime import datetime
 
 from django import forms
 
-from .models import (Adresse, Bruker, Faktura, FakturaLinje, Hytte, Poststed,
-                     Pris, Telefonnr, TidligereEier)
+from .models import (
+    Adresse,
+    Bruker,
+    Faktura,
+    FakturaLinje,
+    Hytte,
+    Poststed,
+    Pris,
+    Telefonnr,
+    TidligereEier,
+)
+
+
+class BrukerModelForm(forms.ModelForm):
+    class Meta:
+        model = Bruker
+        fields = "__all__"
+
+
+class AdresseModelForm(forms.ModelForm):
+    class Meta:
+        model = Adresse
+        fields = ["gate"]
+
+
+class PoststedModelForm(forms.ModelForm):
+    class Meta:
+        model = Poststed
+        fields = "__all__"
+
+
+class TelefonnrModelForm(forms.ModelForm):
+    class Meta:
+        model = Telefonnr
+        fields = ["nr"]
+
+
+class HytteModelForm(forms.ModelForm):
+    class Meta:
+        model = Hytte
+        fields = ["gnr", "bnr", "sone"]
 
 
 class NyBrukerForm(forms.Form):
@@ -22,13 +61,19 @@ class NyBrukerForm(forms.Form):
 
     tlf = forms.CharField(max_length=15)
 
-    ny_hytte = forms.ChoiceField(choices=HYTTER, widget=forms.RadioSelect(), required=False)
+    ny_hytte = forms.ChoiceField(
+        choices=HYTTER, widget=forms.RadioSelect(), required=False
+    )
 
     gnr = forms.CharField(max_length=4, required=False)
     bnr = forms.CharField(max_length=4, required=False)
-    sone = forms.CharField(max_length=8, widget=forms.Select(choices=SONER), required=False)
+    sone = forms.CharField(
+        max_length=8, widget=forms.Select(choices=SONER), required=False
+    )
 
-    overdratt_fra = forms.ModelChoiceField(queryset=(Hytte.objects.all()), required=False)
+    overdratt_fra = forms.ModelChoiceField(
+        queryset=(Hytte.objects.all()), required=False
+    )
 
     def save(self):
         data = self.cleaned_data
@@ -52,7 +97,7 @@ class NyBrukerForm(forms.Form):
 
         tlf = Telefonnr(bruker=ny_bruker, nr=data["tlf"])
         tlf.save()
-        
+
         if data["ny_hytte"] == "Ny hytte":
             hytte = Hytte(
                 eier=ny_bruker, gnr=data["gnr"], bnr=data["bnr"], sone=data["sone"]
@@ -60,7 +105,12 @@ class NyBrukerForm(forms.Form):
             hytte.save()
         elif data["ny_hytte"] == "Overdragelse":
             g_hytte = Hytte.objects.get(pk=data["overdratt_fra"].pk)
-            tidligere_eier = TidligereEier(hytte=g_hytte, gammel_eier=g_hytte.eier, ny_eier=ny_bruker, overdratt=datetime.now())
+            tidligere_eier = TidligereEier(
+                hytte=g_hytte,
+                gammel_eier=g_hytte.eier,
+                ny_eier=ny_bruker,
+                overdratt=datetime.now(),
+            )
             g_hytte.eier = ny_bruker
             g_hytte.save()
             tidligere_eier.save()
