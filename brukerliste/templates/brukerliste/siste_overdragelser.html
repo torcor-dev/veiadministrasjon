@@ -1,0 +1,7 @@
+<ul>
+    {% for od in last_transfers %}
+    <li>Hytte: {{ od.hytte.gnr }} {{ od.hytte.bnr }}</li>
+    <li>Overdratt av: {{ od.ny_eier }}</li>
+    <li>Overdratt fra: {{ od.gammel_eier }}</li>
+    {% endfor %}
+</ul>
