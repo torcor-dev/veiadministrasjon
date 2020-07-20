@@ -1,16 +1,24 @@
+from django.contrib.postgres.search import (
+    SearchQuery,
+    SearchRank,
+    SearchVector,
+    TrigramSimilarity,
+)
+from django.db.models.functions import Greatest
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.shortcuts import get_object_or_404, render
+from django.views.generic import DetailView, ListView
 
 from .forms import (
-    NyBrukerForm,
-    BrukerModelForm,
     AdresseModelForm,
-    PoststedModelForm,
-    TelefonnrModelForm,
+    BrukerModelForm,
     HytteModelForm,
+    NyBrukerForm,
+    PoststedModelForm,
+    SearchForm,
+    TelefonnrModelForm,
 )
-from .models import Bruker, Faktura, Hytte, Poststed, Adresse, Telefonnr
+from .models import Adresse, Bruker, Faktura, Hytte, Poststed, Telefonnr
 
 
 class HytteListView(ListView):
@@ -86,3 +94,36 @@ def RedigerBruker(request, pk):
             # "hform": hform,
         },
     )
+
+
+def bruker_search(request):
+    form = SearchForm()
+    query = None
+    results = []
+
+    if "query" in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data["query"]
+            # search_vector = SearchVector("etternavn", "fornavn")
+            # search_query = SearchQuery(query)
+            results = (
+                Bruker.objects.annotate(
+                    similarity=Greatest(
+                        TrigramSimilarity("etternavn", query),
+                        TrigramSimilarity("fornavn", query),
+                    )
+                )
+                .filter(similarity__gt=0.4)
+                .order_by("-similarity")
+                #     search=search_vector, rank=SearchRank(search_vector, search_query)
+                # )
+                # .filter(search=search_query)
+                # .order_by("-rank")
+            )
+    return render(
+        request,
+        "brukerliste/search.html",
+        {"search_form": form, "query": query, "results": results},
+    )
+

@@ -6,6 +6,7 @@ from .views import (
     HytteListView,
     NyBruker,
     RedigerBruker,
+    bruker_search,
 )
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path("hytter/", HytteListView.as_view(), name="hytteliste"),
     path("ny_bruker/", NyBruker, name="ny-bruker"),
     path("rediger_bruker/<int:pk>", RedigerBruker, name="rediger-bruker"),
+    path("bruker_sok/", bruker_search, name="bruker-search"),
 ]

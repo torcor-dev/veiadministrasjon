@@ -114,3 +114,7 @@ class NyBrukerForm(forms.Form):
             g_hytte.eier = ny_bruker
             g_hytte.save()
             tidligere_eier.save()
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField()

@@ -1,8 +1,15 @@
 {% extends "brukerliste/base.html" %}
 {% load brukerliste_tags %}
 {% block content %}
+    {% if query %}
+    <h1>Sokeresultater for {{ query }}:</h1>
+    <h2>
+        {% with results.count as total_results %}
+        Fant {{ total_results }} resultat.
+        {% endwith %}
+    </h2>
     <table>
-    {% for b in brukere %}
+    {% for b in results %}
         <tr>
             <td>
             <a href="{% url 'bruker-detail' b.pk %}">
@@ -22,13 +29,17 @@
             <td>{{ b.faktureres }}</td>
             <td><a href="{% url 'rediger-bruker' b.pk %}">Rediger</a></td>
         </tr>
+    {% empty %}
+        <tr>
+            <td><p>Det var ingen resultat for soket</p></td>
+        </tr>
     {% endfor %}
     </table>
-    <p>Totalt {% total_brukere %} brukere</p>
-    <br>
-    <div class="sidebar">
-        <h5>Siste overdragelser</h5>
-        {% show_last_transfers %}
-    </div>
-    {% include "brukerliste/search.html" %}
-{% endblock content %}
+    {% else %}
+    <h1>Sok etter brukere</h1>
+    <form action="{% url 'bruker-search' %}" method="GET">
+        {{ search_form.as_p }}
+        <input type="submit", value="Search">
+    </form>
+    {% endif %}
+{% endblock %}
