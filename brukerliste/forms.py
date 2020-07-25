@@ -5,11 +5,8 @@ from django import forms
 from .models import (
     Adresse,
     Bruker,
-    Faktura,
-    FakturaLinje,
     Hytte,
     Poststed,
-    Pris,
     Telefonnr,
     TidligereEier,
 )
@@ -75,6 +72,24 @@ class NyBrukerForm(forms.Form):
         queryset=(Hytte.objects.all()), required=False
     )
 
+    def clean(self):
+        data = super().clean()
+
+        epost = data.get("epost")
+        tlf = data.get("tlf")
+        gnr = data.get("gnr")
+        bnr = data.get("bnr")
+        if Bruker.objects.filter(epost=epost).exists():
+            raise forms.ValidationError("Ikke unik epost adresse")
+        elif Telefonnr.objects.filter(nr=tlf).exists():
+            raise forms.ValidationError("Ikke unikt telefonnr")
+        elif data.get("ny_hytte") == "Ny hytte" and (not gnr or not bnr):
+            raise forms.ValidationError("Manglende GNR eller BNR")
+        elif Hytte.objects.filter(gnr=gnr, bnr=bnr).exists():
+            raise forms.ValidationError("Hytten finnes fra før")
+        else:
+            return data
+
     def save(self):
         data = self.cleaned_data
         ny_bruker = Bruker(
@@ -96,6 +111,7 @@ class NyBrukerForm(forms.Form):
         adr.save()
 
         tlf = Telefonnr(bruker=ny_bruker, nr=data["tlf"])
+
         tlf.save()
 
         if data["ny_hytte"] == "Ny hytte":

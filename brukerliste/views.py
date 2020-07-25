@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.postgres.search import (
     SearchQuery,
     SearchRank,
@@ -5,7 +7,7 @@ from django.contrib.postgres.search import (
     TrigramSimilarity,
 )
 from django.db.models.functions import Greatest
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
 
@@ -18,7 +20,7 @@ from .forms import (
     SearchForm,
     TelefonnrModelForm,
 )
-from .models import Adresse, Bruker, Faktura, Hytte, Poststed, Telefonnr
+from .models import Adresse, Bruker, Hytte, Poststed, Telefonnr
 
 
 class HytteListView(ListView):
@@ -45,7 +47,10 @@ def NyBruker(request):
         bform = NyBrukerForm(request.POST)
         if bform.is_valid():
             bform.save()
+            messages.success(request, "En ny bruker ble lagt til")
             return HttpResponseRedirect("../")
+        else:
+            messages.error(request, "Kunne ikke legge til brukeren")
     else:
         bform = NyBrukerForm()
 
@@ -75,7 +80,11 @@ def RedigerBruker(request, pk):
             pform.save()
             tform.save()
             # hform.save()
+            messages.success(request, "Endringene er lagret")
             return HttpResponseRedirect("../")
+        else:
+            messages.error(request, "Endringene kunne ikke gjennomføres")
+
     else:
         bform = BrukerModelForm(instance=bruker)
         aform = AdresseModelForm(instance=adresse)
@@ -123,7 +132,6 @@ def bruker_search(request):
             )
     return render(
         request,
-        "brukerliste/search.html",
-        {"search_form": form, "query": query, "results": results},
+        "brukerliste/bruker_list.html",
+        {"search_form": form, "query": query, "brukere": results},
     )
-
