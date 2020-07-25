@@ -16,6 +16,8 @@ class Bruker(models.Model):
     broyting = models.BooleanField()
     faktureres = models.BooleanField()
     notat = models.TextField(null=True, blank=True)
+    active = models.BooleanField(default=True)
+    date_added = models.DateField(auto_now_add=True, editable=False)
 
     def __str__(self):
         return f"{self.fornavn} {self.etternavn}"
@@ -47,6 +49,7 @@ class Hytte(models.Model):
     eier = models.ForeignKey(
         Bruker, on_delete=models.SET_NULL, null=True, related_name="hytte"
     )
+    date_added = models.DateField(auto_now_add=True, editable=False)
 
     class Meta:
         unique_together = (
@@ -59,36 +62,18 @@ class Hytte(models.Model):
 
 
 class TidligereEier(models.Model):
-    hytte = models.ForeignKey(Hytte, on_delete=models.CASCADE, related_name="tidligere_eier")
-    gammel_eier = models.ForeignKey(Bruker, on_delete=models.CASCADE, related_name="gammel_eier")
-    ny_eier = models.ForeignKey(Bruker, on_delete=models.CASCADE, related_name="ny_eier")
+    hytte = models.ForeignKey(
+        Hytte, on_delete=models.CASCADE, related_name="tidligere_eier"
+    )
+    gammel_eier = models.ForeignKey(
+        Bruker, on_delete=models.CASCADE, related_name="gammel_eier"
+    )
+    ny_eier = models.ForeignKey(
+        Bruker, on_delete=models.CASCADE, related_name="ny_eier"
+    )
     overdratt = models.DateField()
 
     def __str__(self):
-        return f"{self.hytte.gnr} {self.hytte.bnr} {self.gammel_eier} - {self.overdratt}"
-
-
-class Pris(models.Model):
-    basis_pris = models.IntegerField()
-    vinter_pris = models.IntegerField()
-    aar = models.DateField(auto_now=True)
-
-    def __str__(self):
-        return f"{self.aar}"
-
-
-class Faktura(models.Model):
-    bruker = models.ForeignKey(Bruker, on_delete=models.CASCADE)
-    dato = models.DateField(auto_now=True)
-
-    def __str__(self):
-        return f"{self.bruker} {self.dato}"
-
-
-class FakturaLinje(models.Model):
-    pris = models.ForeignKey(Pris, on_delete=models.CASCADE)
-    hytte = models.ForeignKey(Hytte, on_delete=models.CASCADE)
-    faktura = models.ForeignKey(Faktura, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.faktura} {self.hytte}"
+        return (
+            f"{self.hytte.gnr} {self.hytte.bnr} {self.gammel_eier} - {self.overdratt}"
+        )
