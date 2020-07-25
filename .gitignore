@@ -118,4 +118,4 @@ GitHub.sublime-settings
 .history
 
 # vim
-/.vim
+.vim/
