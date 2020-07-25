@@ -1,28 +1,48 @@
 {% extends "brukerliste/base.html" %}
 {% load brukerliste_tags %}
+{% load static %}
 {% block content %}
-    <table>
-    {% for b in brukere %}
-        <tr>
-            <td>
-            <a href="{% url 'bruker-detail' b.pk %}">
-            {{ b.etternavn }}
-            </a>
-            </td>
-            <td>{{ b.fornavn }}</td>
-            <td>{{ b.hytte.first.gnr }}</td>
-            <td>{{ b.hytte.first.bnr }}</td>
-            <td>{{ b.hytte.first.sone }}</td>
-            <td>{{ b.adresse.first.gate }}</td>
-            <td>{{ b.adresse.first.postnr.postnr }}</td>
-            <td>{{ b.adresse.first.postnr.poststed }}</td>
-            <td>{{ b.tlf.first.nr }}</td>
-            <td>{{ b.epost }}</td>
-            <td>{{ b.broyting }}</td>
-            <td>{{ b.faktureres }}</td>
-            <td><a href="{% url 'rediger-bruker' b.pk %}">Rediger</a></td>
-        </tr>
-    {% endfor %}
+    <table class="table table-sm table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Etternavn</th>
+                <th>Fornavn</th>
+                <th>GNR</th>
+                <th>BNR</th>
+                <th>Sone</th>
+                <th>Gateadresse</th>
+                <th>Postnr</th>
+                <th>Poststed</th>
+                <th>Telefon</th>
+                <th>Epost</th>
+                <th>Brøyting</th>
+                <th>Faktureres</th>
+                <th>Rediger</th>
+            </tr>
+        </thead>
+        <tbody class="">
+            {% for b in brukere %}
+                <tr>
+                    <td>
+                    <a href="{% url 'bruker-detail' b.pk %}">
+                    {{ b.etternavn }}
+                    </a>
+                    </td>
+                    <td>{{ b.fornavn }}</td>
+                    <td>{{ b.hytte.first.gnr }}</td>
+                    <td>{{ b.hytte.first.bnr }}</td>
+                    <td>{{ b.hytte.first.sone }}</td>
+                    <td>{{ b.adresse.first.gate }}</td>
+                    <td>{{ b.adresse.first.postnr.postnr }}</td>
+                    <td>{{ b.adresse.first.postnr.poststed }}</td>
+                    <td>{{ b.tlf.first.nr }}</td>
+                    <td>{{ b.epost }}</td>
+                    <td>{{ b.broyting }}</td>
+                    <td>{{ b.faktureres }}</td>
+                    <td><a href="{% url 'rediger-bruker' b.pk %}">Rediger</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
     <p>Totalt {% total_brukere %} brukere</p>
     <br>
