@@ -8,7 +8,7 @@ from django.contrib.postgres.search import (
 )
 from django.db.models.functions import Greatest
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, reverse
 from django.views.generic import DetailView, ListView
 
 from .forms import (
@@ -19,6 +19,7 @@ from .forms import (
     PoststedModelForm,
     SearchForm,
     TelefonnrModelForm,
+    RedigerBrukerForm,
 )
 from .models import Adresse, Bruker, Hytte, Poststed, Telefonnr
 
@@ -57,63 +58,47 @@ def NyBruker(request):
     return render(request, "brukerliste/ny_bruker.html", {"bform": bform,},)
 
 
-def RedigerBruker(request, pk):
+def rediger_bruker(request, pk):
     bruker = get_object_or_404(Bruker, pk=pk)
-    adresse = get_object_or_404(Adresse, bruker=bruker)
-    tlf = get_object_or_404(Telefonnr, bruker=bruker)
-    # hytte = get_object_or_404(Hytte, eier=bruker)
+    adresse = bruker.adresse.first()  # get_object_or_404(Adresse, bruker=bruker)
+    tlf = bruker.tlf.first()  # get_object_or_404(Telefonnr, bruker=bruker)
     if request.method == "POST":
-        bform = BrukerModelForm(request.POST, instance=bruker)
-        aform = AdresseModelForm(request.POST, instance=adresse)
-        pform = PoststedModelForm(request.POST, instance=adresse.postnr)
-        tform = TelefonnrModelForm(request.POST, instance=tlf)
-        # hform = HytteModelForm(request.POST, instance=hytte)
-        if (
-            bform.is_valid()
-            and aform.is_valid()
-            and pform.is_valid()
-            and tform.is_valid()
-            # and hform.is_valid()
-        ):
+        bform = RedigerBrukerForm(request.POST, bruker=bruker)
+        if bform.is_valid():
             bform.save()
-            aform.save()
-            pform.save()
-            tform.save()
-            # hform.save()
             messages.success(request, "Endringene er lagret")
             return HttpResponseRedirect("../")
         else:
-            messages.error(request, "Endringene kunne ikke gjennomføres")
-
+            messages.error(request, "Kunne gjennomføre endringene")
     else:
-        bform = BrukerModelForm(instance=bruker)
-        aform = AdresseModelForm(instance=adresse)
-        pform = PoststedModelForm(instance=adresse.postnr)
-        tform = TelefonnrModelForm(instance=tlf)
-        # hform = HytteModelForm(instance=hytte)
+        init = {
+            "fornavn": bruker.fornavn,
+            "etternavn": bruker.etternavn,
+            "epost": bruker.epost,
+            "broyting": bruker.broyting,
+            "faktureres": bruker.faktureres,
+            # active
+            "postnr": adresse.postnr.postnr,
+            "poststed": adresse.postnr.poststed,
+            "gate": adresse.gate,
+            "tlf": tlf.nr,
+        }
 
-    return render(
-        request,
-        "brukerliste/rediger_bruker.html",
-        {
-            "bform": bform,
-            "aform": aform,
-            "pform": pform,
-            "tform": tform,
-            # "hform": hform,
-        },
-    )
+        bform = RedigerBrukerForm(initial=init, bruker=bruker)
+
+    return render(request, "brukerliste/ny_bruker.html", {"bform": bform,},)
 
 
 def bruker_search(request):
     form = SearchForm()
     query = None
     results = []
-
     if "query" in request.GET:
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data["query"]
+            if query == "":
+                return HttpResponseRedirect(reverse("brukerliste"))
             # search_vector = SearchVector("etternavn", "fornavn")
             # search_query = SearchQuery(query)
             results = (
@@ -121,6 +106,7 @@ def bruker_search(request):
                     similarity=Greatest(
                         TrigramSimilarity("etternavn", query),
                         TrigramSimilarity("fornavn", query),
+                        TrigramSimilarity("epost", query),
                     )
                 )
                 .filter(similarity__gt=0.4)
@@ -130,8 +116,8 @@ def bruker_search(request):
                 # .filter(search=search_query)
                 # .order_by("-rank")
             )
-    return render(
-        request,
-        "brukerliste/bruker_list.html",
-        {"search_form": form, "query": query, "brukere": results},
-    )
+        return render(
+            request,
+            "brukerliste/bruker_list.html",
+            {"search_form": form, "query": query, "brukere": results},
+        )
