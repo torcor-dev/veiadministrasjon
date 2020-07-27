@@ -1,10 +1,21 @@
 {% extends "brukerliste/base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% block content %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ bform | crispy }}
-        <input type="submit" value="Submit">
-    </form>
+
+{% crispy bform %}
+
+<script>
+    const button = document.getElementById("submit-id-submit");
+    button.onclick = function setHiddenValue() { 
+        const hv = document.getElementById("id_ny_hytte");
+        const nh = document.getElementById("ny_hytte");
+        const od = document.getElementById("overdragelse");
+
+        if (nh.className == "collapse show") { hv.value = nh.id; }
+        else if (od.className == "collapse show") { hv.value = od.id; }
+        else { hv.value = "None"; }
+    };
+</script>
 {% endblock content %}
 
