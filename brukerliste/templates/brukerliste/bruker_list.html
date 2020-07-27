@@ -2,7 +2,7 @@
 {% load brukerliste_tags %}
 {% load static %}
 {% block content %}
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-striped table-hover">
         <thead class="thead-dark">
             <tr>
                 <th>Etternavn</th>
@@ -20,13 +20,13 @@
                 <th>Rediger</th>
             </tr>
         </thead>
-        <tbody class="">
+        <tbody>
             {% for b in brukere %}
                 <tr>
                     <td>
-                    <a href="{% url 'bruker-detail' b.pk %}">
-                    {{ b.etternavn }}
-                    </a>
+                        <a href="{% url 'bruker-detail' b.pk %}">
+                            {{ b.etternavn }}
+                        </a>
                     </td>
                     <td>{{ b.fornavn }}</td>
                     <td>{{ b.hytte.first.gnr }}</td>
