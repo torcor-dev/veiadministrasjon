@@ -1,0 +1,14 @@
+{% extends "brukerliste/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<form method="post">
+    <fieldset class="form-group">
+    <legend class="border-bottom">Rediger hytte</legend>
+    {% csrf_token %}
+    {{ form | crispy }}
+    </fieldset>
+    <input type="submit" value="Oppdater" class='btn btn-primary'>
+</form>
+
+{% endblock content %}

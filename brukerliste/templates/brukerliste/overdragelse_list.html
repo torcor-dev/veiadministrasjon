@@ -1,0 +1,29 @@
+{% extends "brukerliste/base.html" %}
+{% load brukerliste_tags %}
+{% load static %}
+{% block content %}
+    <table class="table table-responsive-xl table-sm table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Dato</th>
+                <th>GNR</th>
+                <th>BNR</th>
+                <th>Overdratt fra</th>
+                <th>Overdratt til</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for od in overdragelser %}
+            <tr>
+                <td>{{ od.overdratt }}</td>
+                <td>{{ od.hytte.gnr }}</td>
+                <td>{{ od.hytte.bnr }}</td>
+                <td>{{ od.gammel_eier }}</td>
+                <td>{{ od.ny_eier }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}
+{% block sidebar %}
+{% endblock %}

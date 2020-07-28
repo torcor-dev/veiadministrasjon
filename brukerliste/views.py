@@ -9,7 +9,9 @@ from django.contrib.postgres.search import (
 from django.db.models.functions import Greatest
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render, reverse
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, UpdateView
+from datetime import datetime
+
 
 from .forms import (
     AdresseModelForm,
@@ -21,7 +23,7 @@ from .forms import (
     TelefonnrModelForm,
     RedigerBrukerForm,
 )
-from .models import Adresse, Bruker, Hytte, Poststed, Telefonnr
+from .models import Adresse, Bruker, Hytte, Poststed, Telefonnr, TidligereEier
 
 
 class HytteListView(ListView):
@@ -121,3 +123,38 @@ def bruker_search(request):
             "brukerliste/bruker_list.html",
             {"search_form": form, "query": query, "brukere": results},
         )
+
+
+def hytte_update(request, pk):
+    hytte = get_object_or_404(Hytte, pk=pk)
+    cur_eier = hytte.eier
+    if request.method == "POST":
+        form = HytteModelForm(request.POST, instance=hytte)
+        if form.is_valid():
+            cd = form.cleaned_data
+            if cd["eier"] != cur_eier:
+                overdragelse = TidligereEier(
+                    ny_eier=cd["eier"],
+                    gammel_eier=cur_eier,
+                    hytte=hytte,
+                    overdratt=datetime.today(),
+                )
+                overdragelse.save()
+                messages.success(request, "En ny overdragelse er registrert")
+            form.save()
+            messages.success(request, "Endringene er lagret")
+        else:
+            messages.error(
+                request,
+                "Endringene kunne ikke gjennomføres, sjekk at alle feltene er rikgtig utfylt",
+            )
+        return HttpResponseRedirect(reverse("hytte-update", args=[pk]))
+    form = HytteModelForm(instance=hytte)
+    return render(request, "brukerliste/hytte_update_form.html", {"form": form})
+
+
+class OverdragelseListView(ListView):
+    model = TidligereEier
+    context_object_name = "overdragelser"
+    template_name = "brukerliste/overdragelse_list.html"
+    ordering = ["-overdratt"]
