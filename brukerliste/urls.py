@@ -7,6 +7,8 @@ from .views import (
     NyBruker,
     bruker_search,
     rediger_bruker,
+    hytte_update,
+    OverdragelseListView,
 )
 
 urlpatterns = [
@@ -16,4 +18,6 @@ urlpatterns = [
     path("ny_bruker/", NyBruker, name="ny-bruker"),
     path("rediger_bruker/<int:pk>", rediger_bruker, name="rediger-bruker"),
     path("bruker_sok/", bruker_search, name="bruker-search"),
+    path("hytter/<int:pk>/", hytte_update, name="hytte-update"),
+    path("overdragelser/", OverdragelseListView.as_view(), name="overdragelser"),
 ]
