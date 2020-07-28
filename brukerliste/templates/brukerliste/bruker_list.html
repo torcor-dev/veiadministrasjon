@@ -2,7 +2,7 @@
 {% load brukerliste_tags %}
 {% load static %}
 {% block content %}
-    <table class="table table-sm table-striped table-hover">
+    <table class="table table-responsive-xl table-sm table-striped table-hover">
         <thead class="thead-dark">
             <tr>
                 <th>Etternavn</th>
@@ -29,8 +29,20 @@
                         </a>
                     </td>
                     <td>{{ b.fornavn }}</td>
-                    <td>{{ b.hytte.first.gnr }}</td>
-                    <td>{{ b.hytte.first.bnr }}</td>
+                    <td>
+                        <a href="{% if b.hytte.first %}
+                            {% url 'hytte-update' b.hytte.first.pk %}
+                            {% endif %}">
+                            {{ b.hytte.first.gnr }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% if b.hytte.first %}
+                            {% url 'hytte-update' b.hytte.first.pk %}
+                            {% endif %}">
+                            {{ b.hytte.first.bnr }}
+                        </a>
+                    </td>
                     <td>{{ b.hytte.first.sone }}</td>
                     <td>{{ b.adresse.first.gate }}</td>
                     <td>{{ b.adresse.first.postnr.postnr }}</td>
@@ -45,10 +57,10 @@
         </tbody>
     </table>
     <p>Totalt {% total_brukere %} brukere</p>
-    <br>
+{% endblock content %}
+{% block sidebar %}
     <div class="sidebar">
         <h5>Siste overdragelser</h5>
         {% show_last_transfers %}
     </div>
-    {% include "brukerliste/search_form.html" %}
-{% endblock content %}
+{% endblock %}
