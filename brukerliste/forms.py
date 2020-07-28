@@ -54,7 +54,7 @@ class TelefonnrModelForm(forms.ModelForm):
 class HytteModelForm(forms.ModelForm):
     class Meta:
         model = Hytte
-        fields = ["gnr", "bnr", "sone"]
+        fields = "__all__"
 
 
 BRUKER_LAYOUT = Layout(
@@ -110,7 +110,11 @@ class RedigerBrukerForm(BrukerForm):
         tlf = data.get("tlf")
         if Bruker.objects.filter(epost=epost).exclude(pk=self.bruker.pk).exists():
             raise forms.ValidationError("Ikke unik epost adresse")
-        elif Telefonnr.objects.filter(nr=tlf).exclude(pk=self.bruker.pk).exists():
+        elif (
+            Telefonnr.objects.filter(nr=tlf)
+            .exclude(nr=self.bruker.tlf.first().nr)
+            .exists()
+        ):
             raise forms.ValidationError("Ikke unikt telefonnr")
 
     def save(self):
@@ -129,6 +133,7 @@ class RedigerBrukerForm(BrukerForm):
             psted = Poststed.objects.get(postnr=data["postnr"])
 
         adr = self.bruker.adresse.first()
+        adr.postnr = psted
         adr.gate = data["gate"]
         adr.save()
 
@@ -154,6 +159,9 @@ class NyBrukerForm(BrukerForm):
                     css_id="ny_hytte",
                 ),
                 AccordionGroup("Overdragelse", "overdratt_fra", css_id="overdragelse",),
+                AccordionGroup(
+                    "Regstrer uten hytte", "uten_hytte", css_id="uten_hytte",
+                ),
             ),
             Field("ny_hytte", value="None"),
             FormActions(
@@ -175,6 +183,7 @@ class NyBrukerForm(BrukerForm):
     overdratt_fra = forms.ModelChoiceField(
         queryset=(Hytte.objects.all()), required=False
     )
+    uten_hytte = forms.BooleanField(initial=True, required=False)
 
     def clean(self):
         data = super().clean()
@@ -238,4 +247,19 @@ class NyBrukerForm(BrukerForm):
 
 
 class SearchForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+        self.helper.layout = Layout(
+            Field(
+                "query",
+                css_class="form-control mr-sm-2",
+                type="search",
+                placeholder="Søk brukere",
+                aria_label="Search",
+            ),
+            Submit("search", "Søk", css_class="btn-secondary my-2 my-sm-0"),
+        )
+
     query = forms.CharField(required=False)
