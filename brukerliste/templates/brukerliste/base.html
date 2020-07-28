@@ -1,4 +1,5 @@
 {% load brukerliste_tags %}
+{% load crispy_forms_tags %}
 {% load static %}
 <!doctype html>
 <html lang="en">
@@ -14,14 +15,68 @@
     <title>Hello, world!</title>
   </head>
   <body>
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-          {{ message }}
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <a class="navbar-brand" href="{% url 'brukerliste' %}">Fosseterveien</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'brukerliste' %}">Brukerliste</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'ny-bruker' %}">Ny bruker</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Fakturering
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Avkryssing</a>
+                  <a class="dropdown-item" href="#">Send faktura</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link " href="{% url 'overdragelser' %}">Overdragelser</a>
+              </li>
+              </ul>
+            <ul class="navbar-nav ml">
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">Logg ut</a>
+              </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" action="{% url 'bruker-search' %}" method="GET">
+                {% crispy search_form %}
+            </form>
+          </div>
+        </nav>
+    </header>
+    
+    <main class="pt-2">
+        <div class="container-fluid">
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+            <div class="row">
+                <div class="col-xl-10">
+                    {% block content %}{% endblock %}
+                </div>
+                <div class="col-xl-2">
+                    {% block sidebar %}{% endblock %}
+                </div>
+            </div>
         </div>
-      {% endfor %}
-    {% endif %}
-    {% block content %}{% endblock %}
+    </main>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
