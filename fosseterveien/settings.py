@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "invoicing.apps.InvoicingConfig",
     "account.apps.AccountConfig",
     "brukerliste.apps.BrukerlisteConfig",
     "crispy_forms",
@@ -84,14 +85,14 @@ WSGI_APPLICATION = "fosseterveien.wsgi.application"
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 with open("fosseterveien/secret.yaml", "r") as sf:
-    secrets = yaml.load(sf, Loader=yaml.Loader)
+    SECRETS = yaml.load(sf, Loader=yaml.Loader)
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": secrets["DB_NAME"],
-        "USER": secrets["DB_USER"],
-        "PASSWORD": secrets["PASS"],
+        "NAME": SECRETS["DB_NAME"],
+        "USER": SECRETS["DB_USER"],
+        "PASSWORD": SECRETS["PASS"],
     }
 }
 
