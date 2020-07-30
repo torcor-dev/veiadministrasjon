@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "invoicing.apps.InvoicingConfig",
     "account.apps.AccountConfig",
     "brukerliste.apps.BrukerlisteConfig",
+    "django_filters",
     "crispy_forms",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -116,6 +117,13 @@ LOGOUT_URL = "logout"
 LOGOUT_REDIRECT_URL = "login"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = SECRETS["EPOST"]["EMAIL_HOST"]
+# EMAIL_PORT = SECRETS["EPOST"]["EMAIL_PORT"]
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = SECRETS["EPOST"]["EMAIL_HOST_USER"]
+# EMAIL_HOST_PASSWORD = SECRETS["EPOST"]["EMAIL_HOST_PASSWORD"]
 
 
 MESSAGE_TAGS = {messages.ERROR: "danger"}

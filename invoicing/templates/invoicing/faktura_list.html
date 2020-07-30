@@ -1,0 +1,41 @@
+{% extends "brukerliste/base.html" %}
+{% load crispy_forms_tags %}
+{% load brukerliste_tags %}
+{% load static %}
+{% block content %}
+    <table class="table table-responsive-xl table-sm table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Dato</th>
+                <th>Navn</th>
+                <th>Hytte</th>
+                <th>Sone</th>
+                <th>Brøyting</th>
+                <th>Total Beløp</th>
+                <th>Fakturakopi</th>
+                <th>Betalt</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in filter.qs %}
+            <tr>
+                <td>{{ f.faktura_dato |date:"d.m.Y" }}</td>
+                <td>{{ f.bruker }}</td>
+                <td>{% for h in f.bruker.hytte.all %}{{ h.gnr }}-{{ h.bnr }}<br>{% endfor %}</td>
+                <td>{{ f.bruker.hytte.first.sone }}</td>
+                <td>{{ f.bruker.broyting }}</td>
+                <td>{{ f.get_total_sum }}</td>
+                <td><a href="{% url 'faktura-pdf' f.pk %}">PDF</a></td>
+                <td>{{ f.betalt }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}
+{% block sidebar %}
+<form action="" method="get" class="form">
+    {{ filter.form | crispy }}
+    <input type="submit" value="Søk" class="btn btn-outline-primary" />
+</form>
+
+{% endblock %}
