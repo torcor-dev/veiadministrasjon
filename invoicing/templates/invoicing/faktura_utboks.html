@@ -13,11 +13,11 @@
                 <th>Brøyting</th>
                 <th>Total Beløp</th>
                 <th>Fakturakopi</th>
-                <th>Betalt</th>
+                <th>Slett</th>
             </tr>
         </thead>
         <tbody>
-            {% for f in filter.qs %}
+            {% for f in fakturaer%}
             <tr>
                 <td>{{ f.faktura_dato |date:"d.m.Y" }}</td>
                 <td>{{ f.bruker }}</td>
@@ -26,16 +26,17 @@
                 <td>{{ f.bruker.broyting }}</td>
                 <td>{{ f.get_total_sum }}</td>
                 <td><a href="{% url 'faktura-pdf' f.pk %}">PDF</a></td>
-                <td><a href="{% url 'faktura-betalt' f.pk %}">{{ f.betalt }}</a></td>
+                <td><a href="{% url 'faktura-slett' f.pk %}">Slett</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan=8>Ingen fakturaer i utboksen</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 {% endblock content %}
 {% block sidebar %}
-<form action="" method="get" class="form">
-    {{ filter.form | crispy }}
-    <input type="submit" value="Søk" class="btn btn-outline-primary" />
-</form>
-
+<a href="{% url 'faktura-utboks-send' %}">Send alle fakturaene i utboksen</a>
+<a href="{% url 'faktura-utboks-slett' %}">Slett alle fakturaene i utboksen</a>
 {% endblock %}
