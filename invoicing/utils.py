@@ -22,19 +22,16 @@ def create_pdf(faktura):
 
 def send_mail(faktura):
     email = EmailMessage(
-        "test mail 1",
-        "body message",
-        "hjulenissen@gmail.com",
-        ["hjulenissen@gmail.com"],
+        "test mail 1", "body message", "hjulenissen@gmail.com", [faktura.bruker.epost],
     )
     html = create_pdf(faktura)
     pdf = weasyprint.HTML(string=html).write_pdf()
 
-    email.attach("test.pdf", pdf)
+    email.attach(f"Faktura.{faktura.id}.pdf", pdf)
     email.send()
 
 
-def create_faktura(bruker, pris, annet=None):
+def create_faktura(bruker, pris):
     f = Faktura(bruker=bruker)
     f.save()
     for hytte in bruker.hytte.all():
@@ -53,9 +50,12 @@ def create_faktura(bruker, pris, annet=None):
                 pris=decimal.Decimal(pris.broyting),
             )
             b_fl.save()
-        if annet:
-            a_fl = FakturaLinje(
-                faktura=f, hytte=hytte, tittel=annet, pris=decimal.Decimal(pris.annet)
-            )
-            a_fl.save()
+    if pris.annet:
+        a_fl = FakturaLinje(
+            faktura=f,
+            hytte=None,
+            tittel=pris.beskrivelse_annet,
+            pris=decimal.Decimal(pris.annet),
+        )
+        a_fl.save()
     return f

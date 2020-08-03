@@ -1,0 +1,16 @@
+{% extends "brukerliste/base.html" %}
+{% load crispy_forms_tags %}
+{% load brukerliste_tags %}
+{% load static %}
+{% block content %}
+<legend class="border-bottom">{{ ctx }} alle fakturaene i utboksen</legend>
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    <p>Er du sikker på at du vil {{ ctx|lower }}e alle fakturaene i utboksen? </p>
+    <input type="submit" value="{{ ctx }} fakturaer" class="btn btn-outline-primary" />
+    <a href="{% url 'faktura-utboks' %}" class="btn btn-danger">Avbryt</a>
+</form>
+
+{% endblock content %}
+{% block sidebar %}
+{% endblock %}

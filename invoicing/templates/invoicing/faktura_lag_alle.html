@@ -1,0 +1,15 @@
+{% extends "brukerliste/base.html" %}
+{% load brukerliste_tags %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ pris_form|crispy }}
+    <input class="btn" type="submit">
+</form>
+
+{% endblock content %}
+{% block sidebar %}
+{% endblock %}

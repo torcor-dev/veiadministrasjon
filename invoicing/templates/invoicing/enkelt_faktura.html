@@ -1,0 +1,24 @@
+{% extends "brukerliste/base.html" %}
+{% load brukerliste_tags %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ pris_form|crispy }}
+    {{ bruker_form|crispy }}
+    <input class="btn btn-outline-primary" value="Lag faktura" type="submit">
+</form>
+
+<script>
+    var select_element = document.getElementById("id_brukerliste");
+    multi(select_element, {
+        "enable_search": true,
+        "search_placeholder": "Søk i brukere...",
+        "non_selected_header": "Ikke valgt",
+            "selected_header": "Valgte brukere"});
+</script>
+{% endblock content %}
+{% block sidebar %}
+{% endblock %}
