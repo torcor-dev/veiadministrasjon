@@ -180,7 +180,7 @@ class NyBrukerForm(BrukerForm):
         max_length=8, widget=forms.Select(choices=SONER), required=False
     )
 
-    overdratt_fra = forms.ModelChoiceField(
+    overdratt_fra = forms.ModelMultipleChoiceField(
         queryset=(Hytte.objects.all()), required=False
     )
     uten_hytte = forms.BooleanField(initial=True, required=False)
@@ -234,7 +234,7 @@ class NyBrukerForm(BrukerForm):
             )
             hytte.save()
         elif data["ny_hytte"] == "overdragelse":
-            g_hytte = Hytte.objects.get(pk=data["overdratt_fra"].pk)
+            g_hytte = Hytte.objects.get(pk=data["overdratt_fra"].first().pk)
             tidligere_eier = TidligereEier(
                 hytte=g_hytte,
                 gammel_eier=g_hytte.eier,
