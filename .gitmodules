@@ -1,0 +1,3 @@
+[submodule "brukerliste/static/js/multi.js"]
+	path = brukerliste/static/js/multi.js
+	url = https://github.com/Fabianlindfors/multi.js
