@@ -16,6 +16,17 @@
         else if (od.className == "collapse show") { hv.value = od.id; }
         else { hv.value = "None"; }
     };
+
 </script>
+
+    <script>
+        var select_element = document.getElementById("id_overdratt_fra");
+        multi(select_element, {
+            "enable_search": true,
+            "search_placeholder": "Søk i brukere...",
+            "non_selected_header": "Ikke valgt",
+                "selected_header": "Valgt bruker",
+            "limit": 1});
+    </script>
 {% endblock content %}
 
