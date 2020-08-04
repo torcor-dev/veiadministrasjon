@@ -94,6 +94,20 @@ def send_utboks(request):
     return render(request, "invoicing/faktura_utboks_confirm.html", {"ctx": ctx})
 
 
+def send_utboks_post(request):
+    markering = "Marker alle fakturaer uten epost adresse som sendt"
+
+    if request.method == "POST":
+        fakturaer = Faktura.objects.filter(sendt=False, bruker__epost="")
+        for f in fakturaer:
+            f.sendt = True
+            f.save()
+        return HttpResponseRedirect(reverse("faktura-utboks"))
+    return render(
+        request, "invoicing/faktura_utboks_confirm.html", {"markering": markering}
+    )
+
+
 def slett_utboks(request):
     ctx = "Slett"
     if request.method == "POST":
