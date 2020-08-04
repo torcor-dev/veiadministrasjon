@@ -1,4 +1,5 @@
 {% load brukerliste_tags %}
+{% load invoicing_tags %}
 {% load crispy_forms_tags %}
 {% load static %}
 <!doctype html>
@@ -45,7 +46,7 @@
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Vannavgift</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="{% url 'faktura-utboks' %}">Utboks</a>
+                  <a class="dropdown-item" href="{% url 'faktura-utboks' %}">Utboks ({% usendte_fakturaer %})</a>
                 </div>
               </li>
               <li class="nav-item">

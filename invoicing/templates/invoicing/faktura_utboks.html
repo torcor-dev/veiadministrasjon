@@ -1,6 +1,6 @@
 {% extends "brukerliste/base.html" %}
 {% load crispy_forms_tags %}
-{% load brukerliste_tags %}
+{% load invoicing_tags %}
 {% load static %}
 {% block content %}
     <table class="table table-responsive-xl table-sm table-striped table-hover">
@@ -39,6 +39,8 @@
             {% endfor %}
         </tbody>
     </table>
+    <p>Totalt {% usendte_fakturaer %} fakturaer i utboksen</p>
+    {% if usendte_fakturaer == 0 %} <p>PPPPPPPP</p> {% endif %}
 {% endblock content %}
 {% block sidebar %}
 <ul>
