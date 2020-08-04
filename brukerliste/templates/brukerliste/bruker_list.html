@@ -1,5 +1,6 @@
 {% extends "brukerliste/base.html" %}
 {% load brukerliste_tags %}
+{% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
     <table class="table table-responsive-xl table-sm table-striped table-hover">
@@ -59,8 +60,8 @@
     <p>Totalt {% total_brukere %} brukere</p>
 {% endblock content %}
 {% block sidebar %}
-    <div class="sidebar">
-        <h5>Siste overdragelser</h5>
-        {% show_last_transfers %}
-    </div>
+<form action="" method="get" class="form">
+    {{ filter.form | crispy }}
+    <input type="submit" value="Søk" class="btn btn-outline-primary" />
+</form>
 {% endblock %}
