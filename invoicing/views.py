@@ -38,7 +38,7 @@ def faktura_liste(request):
     fl = FakturaListeFilter(
         request.GET, queryset=Faktura.objects.filter(sendt=True).order_by("-timestamp")
     )
-    paginator = Paginator(fl.qs, 100)
+    paginator = Paginator(fl.qs, 50)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     return render(
@@ -72,7 +72,9 @@ def faktura_lag_alle(request):
         pris_form = PrisModelForm(request.POST)
         if pris_form.is_valid():
             p = pris_form.save()
-            bl = Bruker.objects.filter(hytte__isnull=False, faktureres=True).distinct()
+            bl = Bruker.objects.filter(
+                hytte__isnull=False, faktureres=True, active=True
+            ).distinct()
             for b in bl:
                 create_faktura(b, p)
             messages.success(request, "Fakturaen(e) er lagt til i utboksen")
