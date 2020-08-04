@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.http import HttpResponse, HttpResponseRedirect
@@ -37,7 +38,12 @@ def faktura_liste(request):
     fl = FakturaListeFilter(
         request.GET, queryset=Faktura.objects.filter(sendt=True).order_by("-timestamp")
     )
-    return render(request, "invoicing/faktura_list.html", {"filter": fl})
+    paginator = Paginator(fl.qs, 100)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(
+        request, "invoicing/faktura_list.html", {"filter": fl, "page_obj": page_obj},
+    )
 
 
 def enkelt_faktura(request):
@@ -96,7 +102,6 @@ def send_utboks(request):
 
 def send_utboks_post(request):
     markering = "Marker alle fakturaer uten epost adresse som sendt"
-
     if request.method == "POST":
         fakturaer = Faktura.objects.filter(sendt=False, bruker__epost="")
         for f in fakturaer:
