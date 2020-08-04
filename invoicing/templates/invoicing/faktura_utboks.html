@@ -25,7 +25,11 @@
                 <td>{{ f.bruker.hytte.first.sone }}</td>
                 <td>{{ f.bruker.broyting }}</td>
                 <td>{{ f.get_total_sum }}</td>
-                <td><a href="{% url 'faktura-pdf' f.pk %}">PDF</a></td>
+                <td><a href="{% url 'faktura-pdf' f.pk %}">PDF</a>
+                {% if not f.bruker.epost %}
+                    <i class="material-icons-outlined md-18" title="Ingen epost adresse"> info </i>
+                {% endif %}
+                </td>
                 <td><a href="{% url 'faktura-slett' f.pk %}">Slett</a></td>
             </tr>
             {% empty %}
@@ -37,6 +41,15 @@
     </table>
 {% endblock content %}
 {% block sidebar %}
-<a href="{% url 'faktura-utboks-send' %}">Send alle fakturaene i utboksen</a>
-<a href="{% url 'faktura-utboks-slett' %}">Slett alle fakturaene i utboksen</a>
+<ul>
+    <li>
+        <a href="{% url 'faktura-utboks-send' %}">Send alle fakturaene i utboksen</a>
+    </li>
+    <li>
+        <a href="{% url 'faktura-utboks-slett' %}">Slett alle fakturaene i utboksen</a>
+    </li>
+    <li><a href="{% url 'faktura-utboks-send-post' %}">Marker de uten epost som sendt</a></li>
+</ul>
+
+
 {% endblock %}

@@ -3,6 +3,7 @@
 {% load brukerliste_tags %}
 {% load static %}
 {% block content %}
+{% if ctx %}
 <legend class="border-bottom">{{ ctx }} alle fakturaene i utboksen</legend>
 <form action="" method="post" class="form">
     {% csrf_token %}
@@ -10,6 +11,15 @@
     <input type="submit" value="{{ ctx }} fakturaer" class="btn btn-outline-primary" />
     <a href="{% url 'faktura-utboks' %}" class="btn btn-danger">Avbryt</a>
 </form>
+{% else %}
+<legend class="border-bottom">{{ markering }}</legend>
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    <p>Er du sikker på at du vil markere alle fakturaene uten epost i utboksen som sendt? </p>
+    <input type="submit" value="Bekreft" class="btn btn-outline-primary" />
+    <a href="{% url 'faktura-utboks' %}" class="btn btn-danger">Avbryt</a>
+</form>
+{% endif %}
 
 {% endblock content %}
 {% block sidebar %}

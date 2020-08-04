@@ -9,6 +9,7 @@ urlpatterns = [
     path("utboks/slett/<int:pk>/", FakturaDeleteView.as_view(), name="faktura-slett"),
     path("utboks/slett/", views.slett_utboks, name="faktura-utboks-slett"),
     path("utboks/send/", views.send_utboks, name="faktura-utboks-send"),
+    path("utboks/send_post/", views.send_utboks_post, name="faktura-utboks-send-post"),
     path("utboks/", views.utboks, name="faktura-utboks"),
     path("lag/", views.enkelt_faktura, name="faktura-lag"),
     path("lag_alle/", views.faktura_lag_alle, name="faktura-lag-alle"),
