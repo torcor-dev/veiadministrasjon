@@ -12,7 +12,7 @@ class Poststed(models.Model):
 class Bruker(models.Model):
     fornavn = models.CharField(max_length=200)
     etternavn = models.CharField(max_length=200)
-    epost = models.EmailField(max_length=250, unique=True)
+    epost = models.EmailField(max_length=250, null=True, blank=True)
     broyting = models.BooleanField()
     faktureres = models.BooleanField()
     notat = models.TextField(null=True, blank=True)

@@ -79,7 +79,7 @@ BRUKER_LAYOUT = Layout(
 class BrukerForm(forms.Form):
     fornavn = forms.CharField(max_length=100)
     etternavn = forms.CharField(max_length=100)
-    epost = forms.EmailField()
+    epost = forms.EmailField(required=False)
     broyting = forms.BooleanField(required=False, label="Brøyting")
     faktureres = forms.BooleanField(required=False)
 
@@ -108,7 +108,11 @@ class RedigerBrukerForm(BrukerForm):
 
         epost = data.get("epost")
         tlf = data.get("tlf")
-        if Bruker.objects.filter(epost=epost).exclude(pk=self.bruker.pk).exists():
+        print(epost, "epost")
+        if (
+            epost
+            and Bruker.objects.filter(epost=epost).exclude(pk=self.bruker.pk).exists()
+        ):
             raise forms.ValidationError("Ikke unik epost adresse")
         elif (
             Telefonnr.objects.filter(nr=tlf)
@@ -192,7 +196,8 @@ class NyBrukerForm(BrukerForm):
         bnr = data.get("bnr")
         epost = data.get("epost")
         tlf = data.get("tlf")
-        if Bruker.objects.filter(epost=epost).exists():
+        print(epost, "epost")
+        if epost and Bruker.objects.filter(epost=epost).exists():
             raise forms.ValidationError("Ikke unik epost adresse")
         elif Telefonnr.objects.filter(nr=tlf).exists():
             raise forms.ValidationError("Ikke unikt telefonnr")
