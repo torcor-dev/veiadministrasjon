@@ -20,5 +20,7 @@ class PrisModelForm(forms.ModelForm):
 
 
 class BrukerSelectForm(forms.Form):
-    brukerliste = forms.ModelMultipleChoiceField(Bruker.objects.filter(faktureres=True))
+    brukerliste = forms.ModelMultipleChoiceField(
+        Bruker.objects.filter(faktureres=True, active=True)
+    )
 
