@@ -24,6 +24,7 @@ from .forms import (
     RedigerBrukerForm,
 )
 from .models import Adresse, Bruker, Hytte, Poststed, Telefonnr, TidligereEier
+from .filters import BrukerListeFilter
 
 
 class HytteListView(ListView):
@@ -39,6 +40,16 @@ class BrukerListView(ListView):
     model = Bruker
     context_object_name = "brukere"
     ordering = ["etternavn"]
+
+
+def bruker_list_view(request):
+    fl = BrukerListeFilter(
+        request.GET, queryset=Bruker.objects.filter(active=True).order_by("etternavn"),
+    )
+    brukere = fl.qs
+    return render(
+        request, "brukerliste/bruker_list.html", {"filter": fl, "brukere": brukere}
+    )
 
 
 class BrukerDetailView(DetailView):
