@@ -9,10 +9,11 @@ from .views import (
     rediger_bruker,
     hytte_update,
     OverdragelseListView,
+    bruker_list_view,
 )
 
 urlpatterns = [
-    path("", BrukerListView.as_view(), name="brukerliste"),
+    path("", bruker_list_view, name="brukerliste"),
     path("bruker/<int:pk>/", BrukerDetailView.as_view(), name="bruker-detail"),
     path("hytter/", HytteListView.as_view(), name="hytteliste"),
     path("ny_bruker/", NyBruker, name="ny-bruker"),
