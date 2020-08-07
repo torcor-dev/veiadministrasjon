@@ -1,10 +1,12 @@
 {% extends "brukerliste/base.html" %}
 {% load crispy_forms_tags %}
+{% load icon %}
+{% block title %}Rediger hytte{% endblock %}
+{% block heading %}{% icon "edit" %} Rediger hytte{% endblock %}
 {% block content %}
 
 <form method="post">
     <fieldset class="form-group">
-    <legend class="border-bottom">Rediger hytte</legend>
     {% csrf_token %}
     {{ form | crispy }}
     </fieldset>

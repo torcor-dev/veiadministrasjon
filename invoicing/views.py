@@ -9,7 +9,7 @@ from django.views.generic import DeleteView
 from .models import Faktura, FakturaLinje, Pris
 from .utils import create_pdf, create_faktura, send_mail
 from .filters import FakturaListeFilter
-from .forms import PrisModelForm, BrukerSelectForm
+from .forms import PrisModelForm, BrukerSelectForm, FILTER_HELPER
 from brukerliste.models import Bruker, Hytte
 
 import weasyprint
@@ -42,7 +42,9 @@ def faktura_liste(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     return render(
-        request, "invoicing/faktura_list.html", {"filter": fl, "page_obj": page_obj},
+        request,
+        "invoicing/faktura_list.html",
+        {"filter": fl, "page_obj": page_obj, "FILTER_HELPER": FILTER_HELPER},
     )
 
 

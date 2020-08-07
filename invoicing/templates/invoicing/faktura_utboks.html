@@ -2,6 +2,26 @@
 {% load crispy_forms_tags %}
 {% load invoicing_tags %}
 {% load static %}
+{% load icon %}
+{% block title %}Utboks{% endblock %}
+{% block heading %}{% icon "inbox" %} Utboks{% endblock %}
+{% block toolbar %}
+<a class="mr-3" href="{% url 'faktura-utboks-send-post' %}">
+        <span title="Marker fakturane uten epost som sendt">
+            {% icon "check" class="feather-md" %}
+        </span>
+</a>
+<a class="mr-3" href="{% url 'faktura-utboks-send' %}">
+        <span title="Send alle fakturaene i utboksen">
+            {% icon "send" class="feather-md" %}
+        </span>
+</a>
+<a class="" href="{% url 'faktura-utboks-slett' %}">
+        <span title="Slett alle fakturaene i utboksen">
+            {% icon "trash-2" class="feather-md" %}
+        </span>
+</a>
+{% endblock %}
 {% block content %}
     <table class="table table-responsive-xl table-sm table-striped table-hover">
         <thead class="thead-dark">
@@ -23,14 +43,23 @@
                 <td>{{ f.bruker }}</td>
                 <td>{% for h in f.bruker.hytte.all %}{{ h.gnr }}-{{ h.bnr }}<br>{% endfor %}</td>
                 <td>{{ f.bruker.hytte.first.sone }}</td>
-                <td>{{ f.bruker.broyting }}</td>
+                <td>
+                    {% if f.bruker.broyting %}
+                    {% icon "check-square" class="feather" %}
+                    {% else %}
+                    {% icon "x-square" class="feather" %}
+                    {% endif %}
+                </td>
                 <td>{{ f.get_total_sum }}</td>
-                <td><a href="{% url 'faktura-pdf' f.pk %}">PDF</a>
+                <td><a href="{% url 'faktura-pdf' f.pk %}">{% icon "file" class="feather" %} PDF</a>
                 {% if not f.bruker.epost %}
-                    <i class="material-icons-outlined md-18" title="Ingen epost adresse"> info </i>
+                <span title="Ingen epostadresse">
+                    {% icon "alert-triangle" class="feather" %}
+                </span>
                 {% endif %}
                 </td>
-                <td><a href="{% url 'faktura-slett' f.pk %}">Slett</a></td>
+                <td><a href="{% url 'faktura-slett' f.pk %}">
+                        <span title="Slett denne fakturaen">{% icon "trash" class="feather" %}</span></a></td>
             </tr>
             {% empty %}
             <tr>
@@ -40,18 +69,6 @@
         </tbody>
     </table>
     <p>Totalt {% usendte_fakturaer %} fakturaer i utboksen</p>
-    {% if usendte_fakturaer == 0 %} <p>PPPPPPPP</p> {% endif %}
 {% endblock content %}
 {% block sidebar %}
-<ul>
-    <li>
-        <a href="{% url 'faktura-utboks-send' %}">Send alle fakturaene i utboksen</a>
-    </li>
-    <li>
-        <a href="{% url 'faktura-utboks-slett' %}">Slett alle fakturaene i utboksen</a>
-    </li>
-    <li><a href="{% url 'faktura-utboks-send-post' %}">Marker de uten epost som sendt</a></li>
-</ul>
-
-
 {% endblock %}

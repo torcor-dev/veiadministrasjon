@@ -2,9 +2,34 @@
 {% load crispy_forms_tags %}
 {% load brukerliste_tags %}
 {% load static %}
+{% load icon %}
+{% block title %}
+{% if ctx %}
+{{ ctx }} alle fakturaene
+{% else %}
+{{ markering }}
+{% endif %}
+{% endblock %}
+{% block heading %}
+{% if ctx == 'Send'%}
+{% icon "send" %}
+{{ ctx }} alle fakturaene i utboksen
+{% elif ctx == 'Slett'%}
+{% icon "trash-2" %}
+{{ ctx }} alle fakturaene i utboksen
+{% else %}
+{% icon "check" %}
+{{ markering }}
+{% endif %}
+
+
+
+{% endblock %}
+
+
+
 {% block content %}
 {% if ctx %}
-<legend class="border-bottom">{{ ctx }} alle fakturaene i utboksen</legend>
 <form action="" method="post" class="form">
     {% csrf_token %}
     <p>Er du sikker på at du vil {{ ctx|lower }}e alle fakturaene i utboksen? </p>
@@ -12,7 +37,6 @@
     <a href="{% url 'faktura-utboks' %}" class="btn btn-danger">Avbryt</a>
 </form>
 {% else %}
-<legend class="border-bottom">{{ markering }}</legend>
 <form action="" method="post" class="form">
     {% csrf_token %}
     <p>Er du sikker på at du vil markere alle fakturaene uten epost i utboksen som sendt? </p>

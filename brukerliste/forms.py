@@ -170,7 +170,6 @@ class NyBrukerForm(BrukerForm):
             Field("ny_hytte", value="None"),
             FormActions(
                 Submit("submit", "Lagre", css_class="button white"),
-                Button("cancel", "Avbryt"),
             ),
         )
 
@@ -268,3 +267,20 @@ class SearchForm(forms.Form):
         )
 
     query = forms.CharField(required=False)
+
+
+FILTER_HELPER = FormHelper()
+FILTER_HELPER.form_method = "GET"
+FILTER_HELPER.label_class = "text-muted"
+FILTER_HELPER.layout = Layout(
+    Row(Column("navn", css_class="form-group col-md-12 mb-0"),),
+    Row(
+        Column("gnr", css_class="form-group col-md-6 mb-0"),
+        Column("bnr", css_class="form-group col-md-6 mb-0"),
+    ),
+    Row(
+        Column("broyting", css_class="form-group col-md-6 mb-0"),
+        Column("sone", css_class="form-group col-md-2 pt-6 mb-0"),
+    ),
+    Submit("search", "Søk", css_class="btn-secondary my-2 my-sm-0"),
+)

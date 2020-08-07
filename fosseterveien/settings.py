@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "invoicing.apps.InvoicingConfig",
     "account.apps.AccountConfig",
     "brukerliste.apps.BrukerlisteConfig",
+    "django_feather",
     "django_filters",
     "crispy_forms",
     "django.contrib.admin",

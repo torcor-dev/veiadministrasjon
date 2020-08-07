@@ -5,10 +5,10 @@ from .models import Bruker
 
 class BrukerListeFilter(django_filters.FilterSet):
     navn = django_filters.CharFilter(
-        field_name="etternavn", lookup_expr="icontains", label="Etternavn"
+        field_name="etternavn", lookup_expr="icontains", label="Etternavn",
     )
     gnr = django_filters.NumberFilter(
-        field_name="hytte__gnr", label="GNR", distinct=True,
+        field_name="hytte__gnr", label="GNR", distinct=True
     )
     bnr = django_filters.NumberFilter(
         field_name="hytte__bnr", label="BNR", distinct=True,

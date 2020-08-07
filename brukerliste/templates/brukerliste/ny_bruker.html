@@ -1,6 +1,21 @@
 {% extends "brukerliste/base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load icon %}
+    {% block title %}
+    {% if request.resolver_match.url_name == 'ny-bruker' %}
+    Ny bruker
+    {% else %}
+    Rediger bruker
+    {% endif %}
+    {% endblock %}
+    {% block heading %}
+    {% if request.resolver_match.url_name == 'ny-bruker' %}
+    {% icon "user-plus" %} Ny bruker
+    {% else %}
+    {% icon "edit" %} Rediger bruker
+    {% endif %}
+    {% endblock %}
 {% block content %}
 
 {% crispy bform %}

@@ -2,6 +2,21 @@
 {% load brukerliste_tags %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load icon %}
+{% block title %}Brukerliste{% endblock %}
+{% block heading %}{% icon "users" %} Brukerliste{% endblock %}
+{% block toolbar %}
+<a class="mr-3" href="{% url 'ny-bruker' %}">
+        <span title="Ny bruker">
+            {% icon "user-plus" class="feather-md" %}
+        </span>
+</a>
+<a class="" href="#">
+        <span title="Eksporter til .csv">
+            {% icon "download" class="feather-md" %}
+        </span>
+</a>
+{% endblock %}
 {% block content %}
     <table class="table table-responsive-xl table-sm table-striped table-hover">
         <thead class="thead-dark">
@@ -18,7 +33,11 @@
                 <th>Epost</th>
                 <th>Brøyting</th>
                 <th>Faktureres</th>
-                <th>Rediger</th>
+                <th>
+                    <span title="Rediger bruker">
+                        {% icon "edit" class="feather" %}
+                    </span>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -50,9 +69,28 @@
                     <td>{{ b.adresse.first.postnr.poststed }}</td>
                     <td>{{ b.tlf.first.nr }}</td>
                     <td>{{ b.epost }}</td>
-                    <td>{{ b.broyting }}</td>
-                    <td>{{ b.faktureres }}</td>
-                    <td><a href="{% url 'rediger-bruker' b.pk %}">Rediger</a></td>
+                    <td>
+                        {% if b.broyting %}
+                        {% icon "check-square" class="feather" %}
+                        {% else %}
+                        {% icon "x-square" class="feather" %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if b.faktureres %}
+                        {% icon "check-square" class="feather" %}
+                        {% else %}
+                        {% icon "x-square" class="feather" %}
+                        {% endif %}
+
+
+                    </td>
+                    <td><a href="{% url 'rediger-bruker' b.pk %}">
+                        <span title="Rediger bruker">
+                            {% icon "edit" class="feather" %}
+                        </span>
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -60,8 +98,6 @@
     <p>Totalt {% total_brukere %} brukere</p>
 {% endblock content %}
 {% block sidebar %}
-<form action="" method="get" class="form">
-    {{ filter.form | crispy }}
-    <input type="submit" value="Søk" class="btn btn-outline-primary" />
-</form>
+<h6 class="sidebar-heading d-flex text-muted border-bottom">{% icon "filter" class="feather" %}Filter</h6>
+    {% crispy filter.form FILTER_HELPER %}
 {% endblock %}

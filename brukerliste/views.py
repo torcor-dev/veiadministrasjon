@@ -22,6 +22,7 @@ from .forms import (
     SearchForm,
     TelefonnrModelForm,
     RedigerBrukerForm,
+    FILTER_HELPER,
 )
 from .models import Adresse, Bruker, Hytte, Poststed, Telefonnr, TidligereEier
 from .filters import BrukerListeFilter
@@ -48,7 +49,9 @@ def bruker_list_view(request):
     )
     brukere = fl.qs
     return render(
-        request, "brukerliste/bruker_list.html", {"filter": fl, "brukere": brukere}
+        request,
+        "brukerliste/bruker_list.html",
+        {"filter": fl, "brukere": brukere, "FILTER_HELPER": FILTER_HELPER},
     )
 
 
