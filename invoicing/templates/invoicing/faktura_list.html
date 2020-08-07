@@ -2,6 +2,21 @@
 {% load crispy_forms_tags %}
 {% load invoicing_tags %}
 {% load static %}
+{% load icon %}
+{% block title %}Fakturaoversikt{% endblock %}
+{% block heading %}{% icon "book-open" %} Fakturaoversikt{% endblock %}
+{% block toolbar %}
+<a class="mr-3" href="{% url 'faktura-lag' %}">
+        <span title="Ny faktura">
+            {% icon "file-plus" class="feather-md" %}
+        </span>
+</a>
+<a class="" href="#">
+        <span title="Eksporter til .csv">
+            {% icon "download" class="feather-md" %}
+        </span>
+</a>
+{% endblock %}
 {% block content %}
     <table class="table table-responsive-xl table-sm table-striped table-hover">
         <thead class="thead-dark">
@@ -23,10 +38,26 @@
                 <td>{{ f.bruker }}</td>
                 <td>{% for h in f.bruker.hytte.all %}{{ h.gnr }}-{{ h.bnr }}<br>{% endfor %}</td>
                 <td>{{ f.bruker.hytte.first.sone }}</td>
-                <td>{{ f.bruker.broyting }}</td>
+                <td>
+                    {% if f.bruker.broyting %}
+                    {% icon "check-square" class="feather" %}
+                    {% else %}
+                    {% icon "x-square" class="feather" %}
+                    {% endif %}
+                </td>
                 <td>{{ f.get_total_sum }}</td>
-                <td><a href="{% url 'faktura-pdf' f.pk %}">PDF</a></td>
-                <td><a href="{% url 'faktura-betalt' f.pk %}">{{ f.betalt }}</a></td>
+                <td><a href="{% url 'faktura-pdf' f.pk %}">{% icon "file" class="feather" %} PDF</a></td>
+                <td>
+                    <span title="Kryss av">
+                        <a href="{% url 'faktura-betalt' f.pk %}">
+                            {% if f.betalt %}
+                            {% icon "check-square" class="feather" %}
+                            {% else %}
+                            {% icon "x-square" class="feather" %}
+                            {% endif %}
+                        </a>
+                    </span>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -59,9 +90,8 @@
 
 {% endblock content %}
 {% block sidebar %}
-<form action="" method="get" class="form">
-    {{ filter.form | crispy }}
-    <input type="submit" value="Søk" class="btn btn-outline-primary" />
+<h6 class="sidebar-heading d-flex text-muted border-bottom">{% icon "filter" class="feather" %}Filter</h6>
+    {% crispy filter.form FILTER_HELPER %}
 </form>
 
 {% endblock %}

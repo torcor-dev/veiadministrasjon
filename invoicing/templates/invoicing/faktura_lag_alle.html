@@ -2,12 +2,15 @@
 {% load brukerliste_tags %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load icon %}
+{% block title %}Lag alle fakturaer{% endblock %}
+{% block heading %}{% icon "file-plus" %} Lag alle fakturaer{% endblock %}
 {% block content %}
 
 <form action="" method="post">
     {% csrf_token %}
     {{ pris_form|crispy }}
-    <input class="btn" type="submit">
+    <input class="btn btn-outline-primary" value="Lag fakturaer" type="submit">
 </form>
 
 {% endblock content %}

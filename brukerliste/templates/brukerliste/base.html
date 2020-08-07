@@ -1,13 +1,26 @@
 {% load brukerliste_tags %}
 {% load invoicing_tags %}
 {% load crispy_forms_tags %}
+{% load icon %}
 {% load static %}
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'img/favicon/site.webmanifest' %}">
+
+
+    <title>{% block title %}{% endblock %} Foss-seterveien</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -16,57 +29,126 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <script src="{% static 'js/multi.js/dist/multi.min.js' %}"></script>
 
-    <title>Hello, world!</title>
-  </head>
-  <body>
 
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <a class="navbar-brand" href="{% url 'brukerliste' %}">Fosseterveien</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+  </head>
+
+  <body>
+    <!--
+        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+          <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Company name</a>
+          <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+          <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+              <a class="nav-link" href="#">Sign out</a>
+            </li>
+          </ul>
+        </nav>
+    -->
+    <div class="container-fluid">
+      <div class="row">
+        <nav id="sidebar" class="navbar col-md-2 d-none d-md-none d-md-block bg-light sidebar inactive">
+          <div class="col-md-12 bg-header">
+              <div class="d-flex justify-content-between">
+                    <img src="{% static 'img/logo3.png' %}" class="logo" alt="logo">
+                  <button type="button" id="sidebarCollapseInner" class="d-md-none  navbar-toggler">
+                      {% icon "menu" color="white" %}
+                    </button>
+              </div>
+          </div>
+          <div class="sidebar-sticky">
+            {% with request.resolver_match.url_name as url_name %}
+            <ul class="nav flex-column">
               <li class="nav-item">
-                  <a class="nav-link" href="{% url 'brukerliste' %}">Brukerliste</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="{% url 'ny-bruker' %}">Ny bruker</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Fakturering
+                  <a class="nav-link {% if url_name == 'brukerliste' %}active{% endif %}" href="{% url 'brukerliste' %}">
+                  {% icon "users" class="feather" %}
+                  Brukerliste 
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'faktura-liste' %}">Fakturaliste</a>
-                    <a class="dropdown-item" href="{% url 'faktura-lag' %}">Lag faktura</a>
-                    <a class="dropdown-item" href="{% url 'faktura-lag-alle' %}">Lag alle fakturaer</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Vannavgift</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="{% url 'faktura-utboks' %}">Utboks ({% usendte_fakturaer %})</a>
-                </div>
               </li>
               <li class="nav-item">
-                  <a class="nav-link " href="{% url 'overdragelser' %}">Overdragelser</a>
+                  <a class="nav-link {% if url_name == 'ny-bruker' %}active{% endif %}" href="{% url 'ny-bruker' %}">
+                      {% icon "user-plus" class="feather" %}
+                      Ny bruker</a>
               </li>
-              </ul>
-            <ul class="navbar-nav ml">
               <li class="nav-item">
-                  <a class="nav-link" href="{% url 'logout' %}">Logg ut</a>
+                  <a class="nav-link {% if url_name == 'overdragelser' %}active{% endif %} " href="{% url 'overdragelser' %}">
+                      {% icon "book" class="feather" %}
+                      Overdragelser</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link {% if url_name == 'statistikk' %}active{% endif %} " href="#">
+                      {% icon "bar-chart-2" class="feather" %}
+                      Statistikk</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link {% if url_name == 'logout' %}active{% endif %}" href="{% url 'logout' %}">
+                      {% icon "log-out" class="feather" %}
+                      Logg ut</a>
               </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0" action="{% url 'bruker-search' %}" method="GET">
-                {% crispy search_form %}
-            </form>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              Fakturering
+            </h6>
+            <ul class="nav flex-column mb-5">
+              <li class="nav-item">
+                <a class="nav-link {% if url_name == 'faktura-liste' %}active{% endif %}" href="{% url 'faktura-liste' %}">
+                  {% icon "book-open" class="feather" %}
+                    Fakturaoversikt</a>
+              </li>
+              <li class="nav-item">
+                    <a class="nav-link {% if url_name == 'faktura-lag' %}active{% endif %}" href="{% url 'faktura-lag' %}">
+                      {% icon "file-plus" class="feather" %}
+                        Ny faktura</a>
+              </li>
+              <li class="nav-item">
+                    <a class="nav-link {% if url_name == 'faktura-lag-alle' %}active{% endif %}" href="{% url 'faktura-lag-alle' %}">
+                      {% icon "file-plus" class="feather" %}
+                        Lag alle fakturaer</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link {% if url_name == 'vannavgift' %}active{% endif %}" href="#">
+                      {% icon "file-text" class="feather" %}
+                      Vannavgift</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link {% if url_name == 'faktura-utboks' %}active{% endif %}" href="{% url 'faktura-utboks' %}">
+                      {% icon "inbox" class="feather" %}
+                      Utboks ({% usendte_fakturaer %})</a>
+              </li>
+            </ul>
+            {% endwith %}
+            <div class="flex-column justify-content-between align-items-center px-3">
+                {% block sidebar %}{% endblock %}
+            </div>
+            <div class="footer-spacer"></div>
+            <footer class="footer bg-dark col-md-2 text-muted text-sm align-self-end ">
+                <div>
+                    <p>Ansvarlig: <a href="mailto:#">Tormod Fossum</a>
+                </div>
+                <div class="text-align-bottom">
+                    <a href="https://www.vecteezy.com/free-vector/abstract">Abstract Vectors by Vecteezy</a>
+                </div>
+            </footer>
           </div>
         </nav>
-    </header>
-    
-    <main class="pt-2">
-        <div class="container-fluid">
+
+        <main role="main" id="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+          <div class="flex-row">
+                <h1 class="h2">
+              <button type="button" id="sidebarCollapse" class="d-md-none btn">
+                    {% icon "menu" %}
+              </button>{% block heading %}{% endblock %}</h1>
+          </div>
+            <div class="flex-row">
+                <div class="btn-toolbar mb-2 mb-md-0">
+                  <div class="btn-group mr-2">
+                      {% block toolbar %}{% endblock %}
+                  </div>
+                </div>
+            </div>
+          </div>
             {% if messages %}
               {% for message in messages %}
                 <div class="alert alert-{{ message.tags }}">
@@ -74,22 +156,40 @@
                 </div>
               {% endfor %}
             {% endif %}
-            <div class="row">
-                <div class="col-xl-10">
-                    {% block content %}{% endblock %}
-                </div>
-                <div class="col-xl-2">
-                    {% block sidebar %}{% endblock %}
-                </div>
-            </div>
-        </div>
-    </main>
+          {% block content %}
+          {% endblock %}
+        </main>
+      </div>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
     <script src="{% static 'js/tablesort.js' %}"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+<script>
+    $(document).ready(function () {
+    
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('d-none active');
+            $('#main').toggleClass('col-md-9');
+        });
+        $('#sidebarCollapseInner').on('click', function () {
+            $('#sidebar').toggleClass('d-none active');
+            $('#main').toggleClass('col-md-9');
+        });
+    
+    });
+</script>
+
   </body>
 </html>
