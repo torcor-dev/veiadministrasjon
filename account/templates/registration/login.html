@@ -1,19 +1,17 @@
-{% extends "brukerliste/base.html" %}
+{% extends "registration/base.html" %}
 {% load crispy_forms_tags %}
+{% load icon %}
+{% load static %}
 {% block content %}
-    <div class="content-section">
-        <form method="POST">
+        <form method="POST" class="form-signin border">
+            <img src="{% static 'img/logo.png' %}" class="logo mb-5" alt="logo">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Login</legend>
+                <legend class="border-bottom mb-4">Logg inn {% icon "login" %}</legend>
                 {{ form|crispy }}
             </fieldset>
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Login</button>
-                <small class="text-muted ml-2">
-                    <a href="{% url 'password_reset' %}">Forgot password?</a>
-                </small>
+                <button class="btn btn-outline-info" type="submit">Logg inn</button>
             </div>
         </form>
-    </div>
 {% endblock content %}
