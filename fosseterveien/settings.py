@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 from django.contrib import messages
-
 import os
 import yaml
 
@@ -59,6 +58,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "fosseterveien.middleware.LoginRequiredMiddleware",
 ]
 
 ROOT_URLCONF = "fosseterveien.urls"
@@ -111,6 +111,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
+AUTH_EXEMPT_ROUTES = "login"
+AUTH_LOGIN_ROUTE = "login"
 
 LOGIN_REDIRECT_URL = "brukerliste"
 LOGIN_URL = "login"
