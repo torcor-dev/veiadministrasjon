@@ -11,10 +11,40 @@ from .utils import create_pdf, create_faktura, send_mail
 from .filters import FakturaListeFilter
 from .forms import PrisModelForm, BrukerSelectForm, FILTER_HELPER
 from brukerliste.models import Bruker, Hytte
+from django.contrib.auth.decorators import user_passes_test
 
 import weasyprint
 import datetime
 import decimal
+import csv
+
+
+def eksporter_fakturaoversikt_csv(request):
+    response = HttpResponse(content_type="text/csv")
+    dato = datetime.datetime.today().strftime("%d-%m-%Y")
+    response[
+        "Content-Disposition"
+    ] = f"attachment; filename=fsv_fakturaoversikt_{dato}.csv"
+
+    writer = csv.writer(response)
+    faktura = Faktura.objects.all().order_by("-timestamp")
+    writer.writerow(
+        ["Dato", "Navn", "Hytter", "Brøyting", "Total beløp", "Betalt",]
+    )
+
+    for f in faktura:
+        hytter = [f"{h.gnr} - {h.bnr}" for h in f.bruker.hytte.all()]
+        writer.writerow(
+            [
+                str(f.faktura_dato.strftime("%d/%m/%Y")),
+                str(f.bruker),
+                str(" ".join(hytter)),
+                str(f.bruker.broyting),
+                str(f.get_total_sum()),
+                str(f.betalt),
+            ]
+        )
+    return response
 
 
 def test_faktura(request, bruker_id):
@@ -48,6 +78,11 @@ def faktura_liste(request):
     )
 
 
+# def perm_check(user):
+#    return user.has_perm("invoicing.add_faktura")
+
+
+# @user_passes_test(perm_check, login_url="../", redirect_field_name=None)
 def enkelt_faktura(request):
     if request.method == "POST":
         pris_form = PrisModelForm(request.POST)

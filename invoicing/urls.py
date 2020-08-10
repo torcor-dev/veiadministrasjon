@@ -15,4 +15,9 @@ urlpatterns = [
     path("lag_alle/", views.faktura_lag_alle, name="faktura-lag-alle"),
     path("send_mail/", views.send_mail, name="send-mail"),
     path("betalt/<int:pk>/", views.betalt_faktura, name="faktura-betalt"),
+    path(
+        "eksporter/",
+        views.eksporter_fakturaoversikt_csv,
+        name="eksporter_fakturaoversikt_csv",
+    ),
 ]

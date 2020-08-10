@@ -7,11 +7,11 @@
             <img src="{% static 'img/logo.png' %}" class="logo mb-5" alt="logo">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Logg inn {% icon "login" %}</legend>
+                <legend class="border-bottom mb-4">{% icon 'log-in' %} Logg inn </legend>
                 {{ form|crispy }}
             </fieldset>
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Logg inn</button>
+                <button class="btn btn-secondary" type="submit">Logg inn</button>
             </div>
         </form>
 {% endblock content %}
