@@ -1,11 +1,7 @@
 from django.urls import path
 
 from .views import (
-    BrukerDetailView,
-    BrukerListView,
-    HytteListView,
-    NyBruker,
-    bruker_search,
+    ny_bruker,
     rediger_bruker,
     hytte_update,
     OverdragelseListView,
@@ -16,11 +12,8 @@ from .views import (
 
 urlpatterns = [
     path("", bruker_list_view, name="brukerliste"),
-    path("bruker/<int:pk>/", BrukerDetailView.as_view(), name="bruker-detail"),
-    path("hytter/", HytteListView.as_view(), name="hytteliste"),
-    path("ny_bruker/", NyBruker, name="ny-bruker"),
+    path("ny_bruker/", ny_bruker, name="ny-bruker"),
     path("rediger_bruker/<int:pk>", rediger_bruker, name="rediger-bruker"),
-    path("bruker_sok/", bruker_search, name="bruker-search"),
     path("ny_hytte/<int:pk>/", ny_hytte, name="ny-hytte"),
     path("hytter/<int:pk>/", hytte_update, name="hytte-update"),
     path("overdragelser/", OverdragelseListView.as_view(), name="overdragelser"),

@@ -45,9 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django.contrib.postgres",
-    # "django.contrib.sites",  # sitemap
-    # "django.contrib.sitemaps",  # sitemap
+    # "django.contrib.postgres",
 ]
 
 MIDDLEWARE = [
@@ -74,7 +72,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "brukerliste.context_processors.search_form",
             ],
         },
     },
@@ -91,10 +88,11 @@ with open("fosseterveien/secret.yaml", "r") as sf:
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": SECRETS["DB_NAME"],
-        "USER": SECRETS["DB_USER"],
-        "PASSWORD": SECRETS["PASS"],
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        # "NAME": SECRETS["DB_NAME"],
+        # "USER": SECRETS["DB_USER"],
+        # "PASSWORD": SECRETS["PASS"],
     }
 }
 

@@ -252,25 +252,6 @@ class NyBrukerForm(BrukerForm):
             tidligere_eier.save()
 
 
-class SearchForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_show_labels = False
-        self.helper.layout = Layout(
-            Field(
-                "query",
-                css_class="form-control mr-sm-2",
-                type="search",
-                placeholder="Søk brukere",
-                aria_label="Search",
-            ),
-            Submit("search", "Søk", css_class="btn-secondary my-2 my-sm-0"),
-        )
-
-    query = forms.CharField(required=False)
-
-
 class NyHytteForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.bruker = kwargs.pop("bruker", None)

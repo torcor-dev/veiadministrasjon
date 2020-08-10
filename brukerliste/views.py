@@ -1,26 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.contrib.postgres.search import (
-    SearchQuery,
-    SearchRank,
-    SearchVector,
-    TrigramSimilarity,
-)
-from django.db.models.functions import Greatest
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render, reverse
-from django.views.generic import DetailView, ListView, UpdateView
+from django.views.generic import ListView
 from datetime import datetime
 
-
 from .forms import (
-    AdresseModelForm,
-    BrukerModelForm,
     HytteModelForm,
     NyBrukerForm,
-    PoststedModelForm,
-    SearchForm,
-    TelefonnrModelForm,
     RedigerBrukerForm,
     NyHytteForm,
     FILTER_HELPER,
@@ -74,21 +61,6 @@ def eksporter_brukerliste_csv(request):
     return response
 
 
-class HytteListView(ListView):
-    model = Hytte
-    context_object_name = "hytter"
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        return ctx
-
-
-class BrukerListView(ListView):
-    model = Bruker
-    context_object_name = "brukere"
-    ordering = ["etternavn"]
-
-
 def bruker_list_view(request):
     fl = BrukerListeFilter(
         request.GET, queryset=Bruker.objects.filter(active=True).order_by("etternavn"),
@@ -101,11 +73,7 @@ def bruker_list_view(request):
     )
 
 
-class BrukerDetailView(DetailView):
-    model = Bruker
-
-
-def NyBruker(request):
+def ny_bruker(request):
     if request.method == "POST":
         bform = NyBrukerForm(request.POST)
         if bform.is_valid():
@@ -173,40 +141,6 @@ def ny_hytte(request, pk):
             request, "brukerliste/ny_hytte.html", {"form": form, "bruker": bruker}
         )
     pass
-
-
-def bruker_search(request):
-    form = SearchForm()
-    query = None
-    results = []
-    if "query" in request.GET:
-        form = SearchForm(request.GET)
-        if form.is_valid():
-            query = form.cleaned_data["query"]
-            if query == "":
-                return HttpResponseRedirect(reverse("brukerliste"))
-            # search_vector = SearchVector("etternavn", "fornavn")
-            # search_query = SearchQuery(query)
-            results = (
-                Bruker.objects.annotate(
-                    similarity=Greatest(
-                        TrigramSimilarity("etternavn", query),
-                        TrigramSimilarity("fornavn", query),
-                        TrigramSimilarity("epost", query),
-                    )
-                )
-                .filter(similarity__gt=0.4)
-                .order_by("-similarity")
-                #     search=search_vector, rank=SearchRank(search_vector, search_query)
-                # )
-                # .filter(search=search_query)
-                # .order_by("-rank")
-            )
-        return render(
-            request,
-            "brukerliste/bruker_list.html",
-            {"search_form": form, "query": query, "brukere": results},
-        )
 
 
 def hytte_update(request, pk):
