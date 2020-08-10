@@ -1,7 +1,6 @@
 {% extends "brukerliste/base.html" %}
 {% load brukerliste_tags %}
 {% block content %}
-    {% if query %}
     <h1>Sokeresultater for {{ query }}:</h1>
     <h2>
         {% with results.count as total_results %}
@@ -35,11 +34,9 @@
         </tr>
     {% endfor %}
     </table>
-    {% else %}
-    <h1>Sok etter brukere</h1>
+    <h1>Sok paa nytt</h1>
     <form action="{% url 'bruker-search' %}" method="GET">
         {{ search_form.as_p }}
         <input type="submit", value="Search">
     </form>
-    {% endif %}
 {% endblock %}

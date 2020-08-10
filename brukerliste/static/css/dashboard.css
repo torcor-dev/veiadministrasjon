@@ -1,4 +1,7 @@
 
+html{
+  }
+
 body {
   font-size: .875rem;
 }
@@ -47,6 +50,11 @@ body {
         display: none;
     }
 }
+@media (max-width: 1200px) {
+    #notat {
+        display: none;
+    }
+}
 
 
 
@@ -56,6 +64,7 @@ body {
   bottom: 0;
   left: 0;
   padding: 0;
+  min-width: 200px;
 }
 
 
@@ -111,16 +120,18 @@ body {
 .border-top { border-top: 1px solid #e5e5e5; }
 .border-bottom { border-bottom: 1px solid #e5e5e5; }
 
-.footer {
-  position: fixed;
-  bottom: 0;
-  height: 60px; /* Set the fixed height of the footer here */
+
+.footer-height {
+  position: relative;
+  width: 100%;
+  margin-top: 10rem;
+  text-align: center;
 }
 
-.footer a {
+.footer-height a {
     color: grey;
 }
-.footer a:hover {
+.footer-height a:hover {
     color: inherit;
 }
 

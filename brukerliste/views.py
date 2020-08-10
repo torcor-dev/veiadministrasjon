@@ -22,10 +22,56 @@ from .forms import (
     SearchForm,
     TelefonnrModelForm,
     RedigerBrukerForm,
+    NyHytteForm,
     FILTER_HELPER,
 )
 from .models import Adresse, Bruker, Hytte, Poststed, Telefonnr, TidligereEier
 from .filters import BrukerListeFilter
+
+import csv
+
+
+def eksporter_brukerliste_csv(request):
+    response = HttpResponse(content_type="text/csv")
+    dato = datetime.today().strftime("%d-%m-%Y")
+    response["Content-Disposition"] = f"attachment; filename=fsv_brukerliste_{dato}.csv"
+
+    writer = csv.writer(response)
+    brukere = Bruker.objects.filter(active=True).order_by("etternavn")
+    writer.writerow(
+        [
+            "Etternavn",
+            "Fornavn",
+            "Hytter",
+            "Gateadresse",
+            "Postnr",
+            "Poststed",
+            "Telefon",
+            "Epost",
+            "Brøyting",
+            "Faktureres",
+            "Notat",
+        ]
+    )
+
+    for b in brukere:
+        hytter = [f"{h.gnr} - {h.bnr}" for h in b.hytte.all()]
+        writer.writerow(
+            [
+                str(b.etternavn),
+                str(b.fornavn),
+                str(" ".join(hytter)),
+                str(b.adresse.first().gate),
+                str(b.adresse.first().postnr.postnr),
+                str(b.adresse.first().postnr.poststed),
+                str(b.tlf.first().nr),
+                str(b.epost),
+                str(b.broyting),
+                str(b.faktureres),
+                str(b.notat),
+            ]
+        )
+    return response
 
 
 class HytteListView(ListView):
@@ -78,6 +124,7 @@ def rediger_bruker(request, pk):
     bruker = get_object_or_404(Bruker, pk=pk)
     adresse = bruker.adresse.first()  # get_object_or_404(Adresse, bruker=bruker)
     tlf = bruker.tlf.first()  # get_object_or_404(Telefonnr, bruker=bruker)
+    fakturaer = bruker.faktura.all().order_by("-faktura_dato")[:5]
     if request.method == "POST":
         bform = RedigerBrukerForm(request.POST, bruker=bruker)
         if bform.is_valid():
@@ -93,16 +140,39 @@ def rediger_bruker(request, pk):
             "epost": bruker.epost,
             "broyting": bruker.broyting,
             "faktureres": bruker.faktureres,
-            # active
             "postnr": adresse.postnr.postnr,
             "poststed": adresse.postnr.poststed,
             "gate": adresse.gate,
             "tlf": tlf.nr,
+            "notat": bruker.notat,
+            "aktiv": bruker.active,
         }
 
         bform = RedigerBrukerForm(initial=init, bruker=bruker)
 
-    return render(request, "brukerliste/ny_bruker.html", {"bform": bform,},)
+    return render(
+        request,
+        "brukerliste/rediger_bruker.html",
+        {"bform": bform, "bruker": bruker, "fakturaer": fakturaer},
+    )
+
+
+def ny_hytte(request, pk):
+    bruker = get_object_or_404(Bruker, pk=pk)
+    if request.method == "POST":
+        form = NyHytteForm(request.POST, bruker=bruker)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Endringere er lagret")
+            return HttpResponseRedirect(reverse("rediger-bruker", args=[pk]))
+        else:
+            messages.error(request, "Kunne gjennomføre endringene")
+    else:
+        form = NyHytteForm(bruker=bruker)
+        return render(
+            request, "brukerliste/ny_hytte.html", {"form": form, "bruker": bruker}
+        )
+    pass
 
 
 def bruker_search(request):

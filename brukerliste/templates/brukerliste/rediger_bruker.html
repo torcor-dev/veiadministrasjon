@@ -1,14 +1,50 @@
 {% extends "brukerliste/base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
+{% load icon %}
+    {% block title %}
+    Rediger bruker - {{ bruker }}
+    {% endblock %}
+    {% block heading %}
+    {% icon "edit" %} {{ bruker }}
+    {% endblock %}
 {% block content %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ bform | crispy }}
-        {{ aform | crispy }}
-        {{ pform | crispy }}
-        {{ tform | crispy }}
-        {{ hform | crispy }}
-        <input type="submit" value="Submit">
-    </form>
+    <div class="row">
+        <div class="col-lg-6">
+            {% crispy bform %}
+        </div>
+        <div class="col-lg-4 ">
+            <h2 class="h5 border-bottom">Hytter</h3>
+            <ul class="list-group">
+                {% for h in bruker.hytte.all %}
+                <li class="list-group-item"><a href="{% url 'hytte-update' h.pk %}">{% icon "edit" class="feather" %}{{ h.gnr }} - {{ h.bnr }}</a></li>
+                {% empty %}
+                <li class="list-group-item">Ingen hytter registrert</li>
+                {% endfor %}
+                <li class="list-group-item"> <a href="{% url 'ny-hytte' bruker.pk %}">{% icon 'plus-square' class="feather"  %} Ny hytte</a> </li>
+            </ul>
+            <h2 class="h5 border-bottom mt-3">Siste fakturaer</h3>
+            <ul class="list-group">
+                {% for f in fakturaer %}
+                <li class="list-group-item"><a href="{% url 'faktura-pdf' f.pk %}">{% icon "file" class="feather" %} {{ f.faktura_dato |date:"d.m.Y"}}</a>
+
+                            {% if f.betalt %}
+                            <span title="Betalt">
+                                {% icon "check-square" class="feather" %}
+                            </span>
+                            {% else %}
+                            <span title="Ikke betalt">
+                                {% icon "x-square" class="feather" %}
+                            </span>
+                            {% endif %}
+
+                </li>
+                {% empty %}
+                <li class="list-group-item">Ingen fakturaer registrert</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
 {% endblock content %}
 

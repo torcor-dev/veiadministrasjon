@@ -7,11 +7,13 @@
 {% block heading %}{% icon "file-plus" %} Lag alle fakturaer{% endblock %}
 {% block content %}
 
-<form action="" method="post">
-    {% csrf_token %}
-    {{ pris_form|crispy }}
-    <input class="btn btn-outline-primary" value="Lag fakturaer" type="submit">
-</form>
+<div class="col-xl-6">
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ pris_form|crispy }}
+        <input class="btn btn-outline-primary" value="Lag fakturaer" type="submit">
+    </form>
+</div>
 
 {% endblock content %}
 {% block sidebar %}

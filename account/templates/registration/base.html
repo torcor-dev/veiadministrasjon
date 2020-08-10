@@ -66,16 +66,20 @@
 
   </head>
   <body class="text-center">
-  {% block content %}
-  {% endblock %}
-    <footer class="footer col-md-2 text-muted text-sm align-self-end ">
-        <div>
-            <p>Ansvarlig: <a href="mailto:#">Tormod Fossum</a>
-        </div>
-        <div class="text-align-bottom">
-            <a href="https://www.vecteezy.com/free-vector/abstract">Abstract Vectors by Vecteezy</a>
-        </div>
-    </footer>
+  <div class="container">
+  <div class="col">
+      {% block content %}
+      {% endblock %}
+        <footer class="footer-height text-muted text-sm align-self-end ">
+            <div>
+                <p>Ansvarlig: <a href="mailto:#">Tormod Fossum</a>
+            </div>
+            <div class="text-align-bottom">
+                <a href="https://www.vecteezy.com/free-vector/abstract">Abstract Vectors by Vecteezy</a>
+            </div>
+        </footer>
+  </div>
+  </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

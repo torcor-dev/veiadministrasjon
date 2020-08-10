@@ -3,23 +3,15 @@
 {% load static %}
 {% load icon %}
     {% block title %}
-    {% if request.resolver_match.url_name == 'ny-bruker' %}
-    Ny bruker
-    {% else %}
-    Rediger bruker
-    {% endif %}
+    Ny hytte
     {% endblock %}
     {% block heading %}
-    {% if request.resolver_match.url_name == 'ny-bruker' %}
-    {% icon "user-plus" %} Ny bruker
-    {% else %}
-    {% icon "edit" %} Rediger bruker
-    {% endif %}
+    {% icon "plus-square" %} Ny hytte - {{ bruker }}
     {% endblock %}
 {% block content %}
 
 <div class="col-xl-6">
-    {% crispy bform %}
+    {% crispy form %}
 </div>
 
 <script>
