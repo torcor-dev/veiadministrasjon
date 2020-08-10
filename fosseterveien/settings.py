@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # "django.contrib.postgres",
+    "django.contrib.postgres",
 ]
 
 MIDDLEWARE = [
@@ -88,11 +88,11 @@ with open("fosseterveien/secret.yaml", "r") as sf:
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-        # "NAME": SECRETS["DB_NAME"],
-        # "USER": SECRETS["DB_USER"],
-        # "PASSWORD": SECRETS["PASS"],
+        "ENGINE": "django.db.backends.postgresql",
+        # "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "NAME": SECRETS["DB_NAME"],
+        "USER": SECRETS["DB_USER"],
+        "PASSWORD": SECRETS["PASS"],
     }
 }
 
