@@ -47,14 +47,6 @@ def eksporter_fakturaoversikt_csv(request):
     return response
 
 
-def test_faktura(request, bruker_id):
-    bruker = get_object_or_404(Bruker, pk=bruker_id)
-    pris = Pris.objects.first()
-    faktura = create_faktura(bruker, pris)
-
-    return render(request, "invoicing/faktura.html", {"faktura": faktura})
-
-
 def faktura_pdf(request, faktura_nr):
     faktura = get_object_or_404(Faktura, id=faktura_nr)
     html = create_pdf(faktura)
