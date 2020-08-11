@@ -5,6 +5,7 @@ from .views import FakturaDeleteView
 urlpatterns = [
     path("<int:faktura_nr>/pdf/", views.faktura_pdf, name="faktura-pdf"),
     path("liste/", views.faktura_liste, name="faktura-liste"),
+    path("purring/", views.purring, name="purring"),
     path("utboks/slett/<int:pk>/", FakturaDeleteView.as_view(), name="faktura-slett"),
     path("utboks/slett/", views.slett_utboks, name="faktura-utboks-slett"),
     path("utboks/send/", views.send_utboks, name="faktura-utboks-send"),
