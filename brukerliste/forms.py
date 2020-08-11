@@ -92,7 +92,11 @@ class BrukerForm(forms.Form):
 
 class RedigerBrukerForm(BrukerForm):
     notat = forms.CharField(widget=forms.Textarea, required=False, label="Notat")
-    aktiv = forms.BooleanField(required=False, label="Aktiv")
+    aktiv = forms.BooleanField(
+        required=False,
+        label="Aktiv",
+        help_text="Avhuk her for å fjerne brukeren fra listen, historikk blir beholdt",
+    )
 
     def __init__(self, *args, **kwargs):
         self.bruker = kwargs.pop("bruker", None)
