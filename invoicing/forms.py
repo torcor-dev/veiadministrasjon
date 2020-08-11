@@ -23,6 +23,12 @@ class PrisModelForm(forms.ModelForm):
     class Meta:
         model = Pris
         fields = "__all__"
+        labels = {"ovre": "Øvre", "broyting": "Brøyting"}
+        help_texts = {
+            "basis": "Grunnpris/veiavgift for nedre sone, sett som 0 hvis det skal bare faktureres brøyting eller annet",
+            "ovre": "Tillegg i veiavgift for øvre sone, legges automatisk til basisprisen",
+            "annet": "Diverse annet, f.eks. purring, legges til som egen fakuralinje, husk beskrivelse",
+        }
 
     def clean(self):
         data = super().clean()

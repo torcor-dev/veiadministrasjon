@@ -7,9 +7,10 @@ from django.shortcuts import render, get_object_or_404, reverse
 from django.template.loader import render_to_string
 from django.views.generic import DeleteView
 from .models import Faktura, FakturaLinje, Pris
-from .utils import create_pdf, create_faktura, send_mail
+from .utils import create_pdf, create_faktura  # send_mail
 from .filters import FakturaListeFilter
 from .forms import PrisModelForm, BrukerSelectForm, FILTER_HELPER
+from .tasks import send_mail
 from brukerliste.models import Bruker, Hytte
 from django.contrib.auth.decorators import user_passes_test
 
@@ -27,7 +28,7 @@ def eksporter_fakturaoversikt_csv(request):
     ] = f"attachment; filename=fsv_fakturaoversikt_{dato}.csv"
 
     writer = csv.writer(response)
-    faktura = Faktura.objects.all().order_by("-timestamp")
+    faktura = Faktura.objects.all().order_by("-faktura_dato", "-oppdatert_dato")
     writer.writerow(
         ["Dato", "Navn", "Hytter", "Brøyting", "Total beløp", "Betalt",]
     )
@@ -58,7 +59,10 @@ def faktura_pdf(request, faktura_nr):
 
 def faktura_liste(request):
     fl = FakturaListeFilter(
-        request.GET, queryset=Faktura.objects.filter(sendt=True).order_by("-timestamp")
+        request.GET,
+        queryset=Faktura.objects.filter(sendt=True).order_by(
+            "-faktura_dato", "-oppdatert_dato"
+        ),
     )
     paginator = Paginator(fl.qs, 50)
     page_number = request.GET.get("page")
@@ -113,6 +117,21 @@ def faktura_lag_alle(request):
     return render(request, "invoicing/faktura_lag_alle.html", {"pris_form": pris_form},)
 
 
+def purring(request):
+    dato = datetime.datetime.now() - datetime.timedelta(
+        days=settings.SECRETS["FAKTURA"]["FORFALL"]
+    )
+    fakturaer = Faktura.objects.filter(sendt=True, betalt=False, faktura_dato__lt=dato)
+    if fakturaer:
+        for f in fakturaer:
+            f.faktura_dato = datetime.date.today()
+            f.sendt = False
+            f.save()
+        messages.info(request, "Fakturaen(e) er lagt til i utboksen")
+        return HttpResponseRedirect(reverse("faktura-utboks"))
+    return HttpResponseRedirect(reverse("faktura-liste"))
+
+
 def utboks(request):
     fakturaer = Faktura.objects.filter(sendt=False).order_by("-timestamp")
     return render(request, "invoicing/faktura_utboks.html", {"fakturaer": fakturaer})
@@ -124,9 +143,10 @@ def send_utboks(request):
         fakturaer = Faktura.objects.filter(sendt=False)
         for f in fakturaer:
             if f.bruker.epost:
-                send_mail(f)
                 f.sendt = True
                 f.save()
+                # async celery task
+                send_mail.delay(f.pk)
         return HttpResponseRedirect(reverse("faktura-utboks"))
     return render(request, "invoicing/faktura_utboks_confirm.html", {"ctx": ctx})
 

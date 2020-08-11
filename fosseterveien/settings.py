@@ -68,6 +68,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "brukerliste.context_processor.site_admin",
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -117,14 +118,15 @@ LOGIN_URL = "login"
 LOGOUT_URL = "logout"
 LOGOUT_REDIRECT_URL = "login"
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_HOST = SECRETS["EPOST"]["EMAIL_HOST"]
-# EMAIL_PORT = SECRETS["EPOST"]["EMAIL_PORT"]
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = SECRETS["EPOST"]["EMAIL_HOST_USER"]
-# EMAIL_HOST_PASSWORD = SECRETS["EPOST"]["EMAIL_HOST_PASSWORD"]
+DEFAULT_FROM_EMAIL = SECRETS["ADMIN"]["EPOST"]
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = SECRETS["EPOST"]["EMAIL_HOST"]
+EMAIL_PORT = SECRETS["EPOST"]["EMAIL_PORT"]
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = SECRETS["EPOST"]["EMAIL_HOST_USER"]
+EMAIL_HOST_PASSWORD = SECRETS["EPOST"]["EMAIL_HOST_PASSWORD"]
 
 
 MESSAGE_TAGS = {messages.ERROR: "danger"}

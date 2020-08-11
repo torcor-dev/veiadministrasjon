@@ -97,12 +97,12 @@
               <li class="nav-item">
                     <a class="nav-link {% if url_name == 'faktura-lag' %}active{% endif %}" href="{% url 'faktura-lag' %}">
                       {% icon "file-plus" class="feather" %}
-                        Ny faktura</a>
+                        Veiavgift (Enkeltvis)</a>
               </li>
               <li class="nav-item">
                     <a class="nav-link {% if url_name == 'faktura-lag-alle' %}active{% endif %}" href="{% url 'faktura-lag-alle' %}">
                       {% icon "file-plus" class="feather" %}
-                        Lag alle fakturaer</a>
+                        Veiavgift (Alle)</a>
               </li>
               <li class="nav-item">
                   <a class="nav-link {% if url_name == 'vannavgift' %}active{% endif %}" href="#">
@@ -148,7 +148,7 @@
           {% block content %}
           {% endblock %}
                 <footer class="footer-height text-muted text-sm">
-                    <p>Ansvarlig: <a href="mailto:#">Tormod Fossum</a>
+                    <p>Ansvarlig: <a href="mailto:{{ admin.epost }}">{{ admin.navn }}</a>
                     <br>
                     <a href="https://www.vecteezy.com/free-vector/abstract">Abstract Vectors by Vecteezy</a>
                     </p>
