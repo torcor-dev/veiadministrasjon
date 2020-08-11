@@ -7,9 +7,10 @@ from django.shortcuts import render, get_object_or_404, reverse
 from django.template.loader import render_to_string
 from django.views.generic import DeleteView
 from .models import Faktura, FakturaLinje, Pris
-from .utils import create_pdf, create_faktura, send_mail
+from .utils import create_pdf, create_faktura  # send_mail
 from .filters import FakturaListeFilter
 from .forms import PrisModelForm, BrukerSelectForm, FILTER_HELPER
+from .tasks import send_mail
 from brukerliste.models import Bruker, Hytte
 from django.contrib.auth.decorators import user_passes_test
 
@@ -142,9 +143,10 @@ def send_utboks(request):
         fakturaer = Faktura.objects.filter(sendt=False)
         for f in fakturaer:
             if f.bruker.epost:
-                send_mail(f)
                 f.sendt = True
                 f.save()
+                # async celery task
+                send_mail.delay(f.pk)
         return HttpResponseRedirect(reverse("faktura-utboks"))
     return render(request, "invoicing/faktura_utboks_confirm.html", {"ctx": ctx})
 
