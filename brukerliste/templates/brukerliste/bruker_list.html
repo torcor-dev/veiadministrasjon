@@ -94,7 +94,7 @@
             {% endfor %}
         </tbody>
     </table>
-    <p>Totalt {% total_brukere %} brukere</p>
+    <p>Totalt {{ brukere.count }} brukere</p>
 {% endblock content %}
 {% block sidebar %}
 <h6 class="sidebar-heading d-flex text-muted border-bottom">{% icon "filter" class="feather" %}Filter</h6>
