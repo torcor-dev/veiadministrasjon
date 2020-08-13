@@ -1,7 +1,7 @@
 from django.utils.deprecation import MiddlewareMixin
 from django.urls import resolve, reverse
 from django.http import HttpResponseRedirect
-from . import settings
+from django.conf import settings
 
 
 class LoginRequiredMiddleware(MiddlewareMixin):
