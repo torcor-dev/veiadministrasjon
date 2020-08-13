@@ -71,7 +71,7 @@ body {
 .sidebar-sticky {
   position: -webkit-sticky;
   position: sticky;
-  height: calc(100vh - 70px);
+  height: calc((var(--vh, 1vh) * 100) - 70px);
   padding-top: .5rem;
   padding-bottom: .8rem;
   overflow-x: hidden;
