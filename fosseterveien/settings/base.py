@@ -109,7 +109,7 @@ LOGOUT_REDIRECT_URL = "login"
 
 # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-DEFAULT_FROM_EMAIL = SECRETS["ADMIN"]["EPOST"]
+DEFAULT_FROM_EMAIL = "hjulenissen@gmail.com"#SECRETS["ADMIN"]["EPOST"]
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = SECRETS["EPOST"]["EMAIL_HOST"]
 EMAIL_PORT = SECRETS["EPOST"]["EMAIL_PORT"]
