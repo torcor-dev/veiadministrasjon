@@ -73,6 +73,7 @@ body {
   position: sticky;
   height: calc(100vh - 70px);
   padding-top: .5rem;
+  padding-bottom: .8rem;
   overflow-x: hidden;
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
