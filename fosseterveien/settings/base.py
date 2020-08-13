@@ -15,7 +15,9 @@ import yaml
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(
+    os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir)))
+)
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,9 +27,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = SECRETS["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -86,16 +85,6 @@ WSGI_APPLICATION = "fosseterveien.wsgi.application"
 
 with open("fosseterveien/secret.yaml", "r") as sf:
     SECRETS = yaml.load(sf, Loader=yaml.Loader)
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        # "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-        "NAME": SECRETS["DB_NAME"],
-        "USER": SECRETS["DB_USER"],
-        "PASSWORD": SECRETS["PASS"],
-    }
-}
 
 
 # Password validation
