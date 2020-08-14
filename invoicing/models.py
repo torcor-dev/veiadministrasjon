@@ -50,4 +50,4 @@ class Pris(models.Model):
     )
 
     def __str__(self):
-        return f"Priser {self.aar}"
+        return f"Priser {self.timestamp}"
