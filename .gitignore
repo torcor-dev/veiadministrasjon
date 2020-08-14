@@ -118,3 +118,7 @@ GitHub.sublime-settings
 
 # vim
 .vim/
+*.swp
+
+# production
+config/
