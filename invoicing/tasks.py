@@ -11,7 +11,6 @@ import datetime
 @task
 def send_mail(faktura_pk):
     faktura = Faktura.objects.get(pk=faktura_pk)
-    print(faktura)
     betalings_info = settings.SECRETS["FAKTURA"]
     body = [
         f"Hei,\n",
