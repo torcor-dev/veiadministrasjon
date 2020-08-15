@@ -114,7 +114,6 @@ class RedigerBrukerForm(BrukerForm):
 
         epost = data.get("epost")
         tlf = data.get("tlf")
-        print(epost, "epost")
         if (
             epost
             and Bruker.objects.filter(epost=epost).exclude(pk=self.bruker.pk).exists()
@@ -201,7 +200,6 @@ class NyBrukerForm(BrukerForm):
         bnr = data.get("bnr")
         epost = data.get("epost")
         tlf = data.get("tlf")
-        print(epost, "epost")
         if epost and Bruker.objects.filter(epost=epost).exists():
             raise forms.ValidationError("Ikke unik epost adresse")
         elif Telefonnr.objects.filter(nr=tlf).exists():
