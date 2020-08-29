@@ -171,7 +171,7 @@ class NyBrukerForm(BrukerForm):
                 ),
                 AccordionGroup("Overdragelse", "overdratt_fra", css_id="overdragelse",),
                 AccordionGroup(
-                    "Regstrer uten hytte", "uten_hytte", css_id="uten_hytte",
+                    "Registrer uten hytte", "uten_hytte", css_id="uten_hytte",
                 ),
             ),
             Field("ny_hytte", value="None"),
