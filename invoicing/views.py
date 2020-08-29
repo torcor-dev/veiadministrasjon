@@ -211,9 +211,3 @@ def betalt_faktura(request, pk):
         faktura.save()
     # redirect to previous url, which contains filter settings.
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
-
-
-def betals(request):
-    if "this":
-        print("that")
-
