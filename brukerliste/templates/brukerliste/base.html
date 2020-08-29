@@ -100,11 +100,6 @@
                         Veiavgift (Alle)</a>
               </li>
               <li class="nav-item">
-                  <a class="nav-link {% if url_name == 'vannavgift' %}active{% endif %}" href="#">
-                      {% icon "file-text" class="feather" %}
-                      Vannavgift</a>
-              </li>
-              <li class="nav-item">
                   <a class="nav-link {% if url_name == 'faktura-utboks' %}active{% endif %}" href="{% url 'faktura-utboks' %}">
                       {% icon "inbox" class="feather" %}
                       Utboks ({% usendte_fakturaer %})</a>
