@@ -92,6 +92,11 @@
     .invoice-box table tr.total td:nth-child(2) {
         font-weight: bold;
     }
+    .invoice-box table tr.message td  {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        font-size: 14px;
+    }
     
     @media only screen and (max-width: 600px) {
         .invoice-box table tr.top table td {
@@ -165,6 +170,12 @@
                     </table>
                 </td>
             </tr>
+            {% if faktura.beskjed %}
+            <tr class="message">
+                <td colspan="2">{{ faktura.beskjed }}</td>
+            </tr>
+            {% endif %}
+            
             
             <tr class="heading">
                 <td>
@@ -204,6 +215,9 @@
                         Betales til konto: {{ betalings_info.KONTONR }}
                     </td>
                 </tr>
+            <tr class="message">
+                <td colspan="2">Vi setter pris på at dere varsler om endringer av kontaktinformasjon, og at eventuell flytting og overdragelser, samt av- og påmelding for brøyting blir meldt til oss i godt tid.</td>
+            </tr>
         </table>
     </div>
 </body>

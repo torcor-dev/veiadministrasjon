@@ -9,7 +9,7 @@ from django.views.generic import DeleteView
 from .models import Faktura, FakturaLinje, Pris
 from .utils import create_pdf, create_faktura  # send_mail
 from .filters import FakturaListeFilter
-from .forms import PrisModelForm, BrukerSelectForm, FILTER_HELPER
+from .forms import PrisModelForm, BrukerSelectForm, FILTER_HELPER, FakturaModelForm
 from .tasks import send_mail
 from brukerliste.models import Bruker, Hytte
 from django.contrib.auth.decorators import user_passes_test
@@ -83,38 +83,52 @@ def enkelt_faktura(request):
     if request.method == "POST":
         pris_form = PrisModelForm(request.POST)
         bruker_form = BrukerSelectForm(request.POST)
-        if pris_form.is_valid() and bruker_form.is_valid():
+        faktura_form = FakturaModelForm(request.POST)
+        if pris_form.is_valid() and bruker_form.is_valid() and faktura_form.is_valid():
             p = pris_form.save()
+            beskjed = faktura_form.cleaned_data.get("beskjed", None)
             bcd = bruker_form.cleaned_data
             for b in bcd["brukerliste"]:
-                create_faktura(b, p)
+                create_faktura(b, p, beskjed)
             messages.success(request, "Fakturaen(e) er lagt til i utboksen")
             return HttpResponseRedirect(reverse("faktura-utboks"))
         messages.error(request, "Fakturaen(e) ble ikke lagt til i utboksen")
     pris_form = PrisModelForm(instance=Pris.objects.last())
     bruker_form = BrukerSelectForm()
+    faktura_form = FakturaModelForm()
     return render(
         request,
         "invoicing/enkelt_faktura.html",
-        {"pris_form": pris_form, "bruker_form": bruker_form},
+        {
+            "pris_form": pris_form,
+            "bruker_form": bruker_form,
+            "faktura_form": faktura_form,
+        },
     )
 
 
 def faktura_lag_alle(request):
     if request.method == "POST":
         pris_form = PrisModelForm(request.POST)
-        if pris_form.is_valid():
+        faktura_form = FakturaModelForm(request.POST)
+        if pris_form.is_valid() and faktura_form.is_valid():
             p = pris_form.save()
+            beskjed = faktura_form.cleaned_data.get("beskjed", None)
             bl = Bruker.objects.filter(
                 hytte__isnull=False, faktureres=True, active=True
             ).distinct()
             for b in bl:
-                create_faktura(b, p)
+                create_faktura(b, p, beskjed)
             messages.success(request, "Fakturaen(e) er lagt til i utboksen")
             return HttpResponseRedirect(reverse("faktura-utboks"))
         messages.error(request, "Fakturaen(e) ble ikke lagt til i utboksen")
     pris_form = PrisModelForm(instance=Pris.objects.last())
-    return render(request, "invoicing/faktura_lag_alle.html", {"pris_form": pris_form},)
+    faktura_form = FakturaModelForm()
+    return render(
+        request,
+        "invoicing/faktura_lag_alle.html",
+        {"pris_form": pris_form, "faktura_form": faktura_form},
+    )
 
 
 def purring(request):

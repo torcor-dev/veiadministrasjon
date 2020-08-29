@@ -13,6 +13,7 @@ class Faktura(models.Model):
     oppdatert_dato = models.DateTimeField(auto_now=True)
     betalt = models.BooleanField(default=False)
     sendt = models.BooleanField(default=False)
+    beskjed = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"Fakturanr {self.id} - {self.faktura_dato} {self.bruker}"

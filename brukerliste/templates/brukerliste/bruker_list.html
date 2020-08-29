@@ -67,7 +67,7 @@
                     <td>{{ b.adresse.first.gate }}</td>
                     <td>{{ b.adresse.first.postnr.postnr }}</td>
                     <td>{{ b.adresse.first.postnr.poststed }}</td>
-                    <td>{{ b.tlf.first.nr }}</td>
+                    <td>{{ b.tlf.first.formated_nr }}</td>
                     <td><a href="mailto:{{ b.epost }}">{{ b.epost }}</a></td>
                     <td>
                         {% if b.broyting %}
