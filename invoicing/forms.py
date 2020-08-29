@@ -20,6 +20,23 @@ from brukerliste.models import Bruker, Hytte
 
 
 class PrisModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.csrf_token = False
+        self.helper.layout = Layout(
+            Row(
+                Column("basis", css_class="form-group col-md-4 mb-0"),
+                Column("ovre", css_class="form-group col-md-4 pt-6 mb-0"),
+                Column("broyting", css_class="form-group col-md-4 mb-0"),
+            ),
+            Row(
+                Column("annet", css_class="form-group col-md-4 mb-0"),
+                Column("beskrivelse_annet", css_class="form-group col-md-8 mb-0"),
+            ),
+        )
+
     class Meta:
         model = Pris
         fields = "__all__"
@@ -40,10 +57,25 @@ class PrisModelForm(forms.ModelForm):
             raise forms.ValidationError("Mangler beløp")
 
 
+class FakturaModelForm(forms.ModelForm):
+    class Meta:
+        model = Faktura
+        fields = ["beskjed"]
+        labels = {
+            "besked": "Beskjed",
+        }
+        help_texts = {
+            "beskjed": "Legg inn en eventuell beskjed til motakerene her",
+        }
+        widgets = {
+            "beskjed": forms.Textarea(
+                attrs={"rows": 1, "cols": 40, "style": "height: 5em;"}
+            )
+        }
+
+
 class BrukerSelectForm(forms.Form):
-    brukerliste = forms.ModelMultipleChoiceField(
-        Bruker.objects.filter(faktureres=True, active=True)
-    )
+    brukerliste = forms.ModelMultipleChoiceField(Bruker.objects.filter(active=True))
 
 
 FILTER_HELPER = FormHelper()

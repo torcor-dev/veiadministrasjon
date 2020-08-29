@@ -9,6 +9,8 @@ ADMINS = ((SECRETS["ADMIN"]["NAVN"], SECRETS["ADMIN"]["EPOST"]),)
 
 ALLOWED_HOSTS = [SECRETS["HOSTS"]["SUB"]] #, SECRETS["HOSTS"]["SEC"], SECRETS["HOSTS"]["MAIN"]]
 
+INSTALLED_APPS.append("django.contrib.postgres")
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",

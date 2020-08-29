@@ -19,7 +19,9 @@ def send_mail(faktura_pk):
         f"Forfallsdato: {faktura.faktura_dato + datetime.timedelta(days=betalings_info['FORFALL'])}\n",
         f"Bankkonto: {betalings_info['KONTONR']}\n\n",
         f"Å betale: {faktura.get_total_sum()}\n\n",
-        f"Se vedlegg for detaljer.\n\n",
+        f"Se vedlegg for detaljer.\n",
+        f"{faktura.beskjed if faktura.beskjed else None}"
+        f"\nVi setter pris på at dere varsler om endringer av kontaktinformasjon, og at eventuell flytting og overdragelser, samt av- og påmelding for brøyting blir meldt til oss i godt tid.\n\n",
         f"Med vennlig hilsen \n",
         f"Foss-seterveien\n",
         f"v/ {betalings_info['NAVN']}\n",
