@@ -8,6 +8,13 @@
     {% block heading %}
     {% icon "edit" %} {{ bruker }}
     {% endblock %}
+{% block toolbar %}
+<a class="mr-3" href="https://www.gulesider.no/{{ bruker.fornavn }}+{{ bruker.etternavn }}/personer" target="_blank" rel="noreferrer noopener" >
+        <span title="Søk i Gulesider">
+            {% icon "search" class="feather-md" %}
+        </span>
+</a>
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-lg-6">

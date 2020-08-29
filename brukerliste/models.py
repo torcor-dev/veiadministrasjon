@@ -39,6 +39,39 @@ class Telefonnr(models.Model):
     def __str__(self):
         return f"{self.bruker} {self.nr}"
 
+    def save(self, *args, **kwargs):
+        self.nr = self.nr.replace(" ", "")
+        super(Telefonnr, self).save(*args, **kwargs)
+
+    def formated_nr(self):
+        nr = self.nr
+        count = 0
+        spaces = 0
+        skip = False
+        fnr = ""
+
+        for i in range(len(nr)-1, -1, -1):
+            if spaces >= 2:
+                skip = False
+            if skip and count == 2:
+                fnr += " "
+                count = 0
+                skip = False
+                spaces += 1
+            elif count == 3:
+                fnr += " "
+                count = 0
+                skip = True
+                spaces += 1
+            fnr += nr[i]
+            count += 1
+        fnr = "".join(fnr[i] for i in range(len(fnr)-1, -1, -1)) 
+
+        return fnr
+
+    
+    
+
 
 class Hytte(models.Model):
     SONER = [("Nedre", "Nedre"), ("Øvre", "Øvre")]

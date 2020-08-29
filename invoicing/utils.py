@@ -47,8 +47,10 @@ def create_pdf(faktura):
 #     email.send()
 
 
-def create_faktura(bruker, pris):
+def create_faktura(bruker, pris, beskjed=None):
     f = Faktura(bruker=bruker)
+    if beskjed:
+        f.beskjed = beskjed
     f.save()
     aar = f.faktura_dato
     prev_aar = aar - datetime.timedelta(days=365)
