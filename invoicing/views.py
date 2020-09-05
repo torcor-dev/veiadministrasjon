@@ -16,6 +16,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 import weasyprint
 import datetime
+import time
 import decimal
 import csv
 
@@ -155,12 +156,18 @@ def send_utboks(request):
     ctx = "Send"
     if request.method == "POST":
         fakturaer = Faktura.objects.filter(sendt=False)
+        delay = 0
         for f in fakturaer:
             if f.bruker.epost:
+                delay += 1
                 f.sendt = True
                 f.save()
                 # async celery task
                 send_mail.delay(f.pk)
+                if delay == 5:
+                    time.sleep(3)
+                    delay = 0
+
         return HttpResponseRedirect(reverse("faktura-utboks"))
     return render(request, "invoicing/faktura_utboks_confirm.html", {"ctx": ctx})
 
