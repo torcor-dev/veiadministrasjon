@@ -7,7 +7,7 @@ DEBUG = False
 
 ADMINS = ((SECRETS["ADMIN"]["NAVN"], SECRETS["ADMIN"]["EPOST"]),)
 
-ALLOWED_HOSTS = [SECRETS["HOSTS"]["SUB"]] #, SECRETS["HOSTS"]["SEC"], SECRETS["HOSTS"]["MAIN"]]
+ALLOWED_HOSTS = [SECRETS["HOSTS"]["SUB"]]
 
 INSTALLED_APPS.append("django.contrib.postgres")
 

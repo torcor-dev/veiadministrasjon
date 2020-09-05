@@ -31,8 +31,8 @@ def send_mail(faktura_pk):
     ]
 
     email = EmailMessage(
-        "Faktura - Fossæterveien", "".join(body), to=["hjulenissen@gmail.com"]
-    )  # [faktura.bruker.epost],)
+        "Faktura - Fossæterveien", "".join(body), to=[faktura.bruker.epost]
+    )  # ,)
     html = create_pdf(faktura)
     pdf = weasyprint.HTML(string=html).write_pdf()
 
