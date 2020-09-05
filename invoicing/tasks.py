@@ -15,7 +15,7 @@ def send_mail(faktura_pk):
     beskjed = faktura.beskjed if faktura.beskjed else ""
     body = [
         f"Hei,\n",
-        f"Her er faktura for foss-seterveien. \n\n",
+        f"Her er faktura for Fossæterveien. \n\n",
         f"Faktura dato: {faktura.faktura_dato}\n",
         f"Forfallsdato: {faktura.faktura_dato + datetime.timedelta(days=betalings_info['FORFALL'])}\n",
         f"Bankkonto: {betalings_info['KONTONR']}\n\n",
@@ -24,17 +24,17 @@ def send_mail(faktura_pk):
         beskjed,
         f"\nVi setter pris på at dere varsler om endringer av kontaktinformasjon, og at eventuell flytting og overdragelser, samt av- og påmelding for brøyting blir meldt til oss i godt tid.\n\n",
         f"Med vennlig hilsen \n",
-        f"Foss-seterveien\n",
+        f"Fossæterveien\n",
         f"v/ {betalings_info['NAVN']}\n",
         f"{betalings_info['GATE']}\n",
         f"{betalings_info['POSTSTED']}\n",
     ]
 
     email = EmailMessage(
-        "Faktura - Foss-seterveien", "".join(body), to=["hjulenissen@gmail.com"]
+        "Faktura - Fossæterveien", "".join(body), to=["hjulenissen@gmail.com"]
     )  # [faktura.bruker.epost],)
     html = create_pdf(faktura)
     pdf = weasyprint.HTML(string=html).write_pdf()
 
-    email.attach(f"Faktura_Foss-seterveien_{faktura.referanse}.pdf", pdf)
+    email.attach(f"Faktura_Fossæterveien_{faktura.referanse}.pdf", pdf)
     email.send()
