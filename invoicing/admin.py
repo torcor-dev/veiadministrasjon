@@ -16,3 +16,4 @@ class FakturaAdmin(admin.ModelAdmin):
         Faktura.get_total_sum,
     ]
     list_filter = ["betalt", "sendt"]
+    list_editable = ["betalt", "sendt"]
